@@ -1,0 +1,91 @@
+
+
+.login-container{
+    border:solid 2px rgb(37, 33, 33);
+    width: 400px;
+    height: 280px;
+    margin: 10px;
+    background-color: #ffffff;
+    padding: 20px;
+    align-items: center;
+    margin-left: 780px;
+    margin-top: -30%;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+  }
+  
+  
+  .login-container input{
+    margin-top: 25px;
+    margin-left: 50px;
+    padding: 6px;
+    border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 70%;
+      font-size: 14px;
+  
+  }
+  .login-container button{
+    margin-left: 130px;
+    margin-top: 30px;
+    cursor: pointer;
+     width: 30%;
+      padding: 10px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+  }
+  
+  .image{
+    /* width: 500px;
+    height: 400px;
+    margin: 30px; */
+  }
+  
+  .password{
+    padding: 20px;
+    margin: 5px;
+    color:blue;
+  
+  }
+  
+  .collapse navbar-collapse a{
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 20px; /* Padding around text */
+    text-decoration: none; /* Remove underline */
+  
+  }
+  
+  .register-form input[type="text"],
+  .register-form input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .register-form input[type="text"]:focus,
+  .register-form input[type="password"]:focus {
+      border-color: #4CAF50;
+      outline: none;
+      box-shadow: 0px 0px 5px rgba(76, 175, 80, 0.5);
+    }
+  
+  .container-fluid{
+    background-color: rgb(234, 229, 238);
+    overflow: hidden;
+    /* background-color: #333; */
+  }
+  /* Register */
+  
+  /* Reset some default browser styles */
+  
+  

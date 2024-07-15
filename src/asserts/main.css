@@ -1,0 +1,60 @@
+  body{
+    background-color: #f6f9ff;
+  }
+  
+  
+  .fp-section{
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    width: 35%;
+    padding: 10px 10px 10px 10px;
+    position: relative;
+    transform: translate(100%,40%);
+  }
+  .app-btn{
+    background-color: #009cf6;
+    color: white;
+    padding: 7px 26px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    border-radius: 50px;
+  }
+  .reset-btn{
+   margin-top: 25px;
+   margin-left: 27%;
+      
+  }
+  .section-title{
+    text-align: center;
+    font-size: 25px;
+    font-weight: 500;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .form-control{
+    box-shadow: none!important;
+  }
+  
+  @media (max-width: 1199px) {
+      .fp-section {
+      display: hidden;
+      width: 48%;
+    padding: 10px 10px 10px 10px;
+    position: relative;
+    transform: translate(50%,50%);
+      }
+    }
+  
+    .error-message{
+      color: #f60000;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .reset-warn{
+        color: #f69000;
+    }
+    strong{
+        color: #000;
+    }
+  

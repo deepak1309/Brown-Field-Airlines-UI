@@ -1,0 +1,109 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+ 
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+  }
+ 
+  .App {
+    text-align: center;
+    padding: 20px;
+  }
+ 
+  .paper {
+    padding: 20px;
+    margin-top: 20px;
+  }
+ 
+  .header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+ 
+  .trip-type, .fare-type {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+ 
+  .cards {
+    margin-bottom: 20px;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+ 
+  }
+ 
+  .card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+ 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    min-width: 100px;
+    background-color: white;
+    flex-wrap: wrap;
+ 
+  }
+ 
+  .icon-box {
+    flex: 0 0 20px;
+  }
+ 
+  .swap-icon {
+    font-size: 1rem;
+    color: #4CAF50;
+  }
+ 
+  .add-city-button {
+    margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+  }
+ 
+  .remove-city-button {
+    color: red;
+  }
+ 
+  .fare-title {
+    text-align: left;
+    margin-bottom: 10px;
+  }
+ 
+  .fare-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+  }
+ 
+  .discount {
+    color: gray;
+    text-align: center;
+  }
+ 
+  .search-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 30px;
+    background-color: #4CAF50; /* Green theme */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+  }
