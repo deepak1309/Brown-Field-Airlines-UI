@@ -18,12 +18,6 @@ export default function Register() {
 
 
 
-  // useEffect(() => {
-  //   Service.register().then((res)=>{
-  //     console.log(res.data)
-  //     setRegisters(res.data)
-  //   })
-  // }, [])
 
   let handle=(e)=>{
     const {name,value}=e.target
@@ -32,11 +26,6 @@ export default function Register() {
 
   let create=(e)=>{
      e.preventDefault();
-
-     if (!Registers.email.includes('@')) {
-      setMessage('Please enter a valid email address.');
-      return;
-    }
   
     register(Registers).then((res)=>{
       console.log(res.data)
@@ -48,20 +37,19 @@ export default function Register() {
         password: "",
         address: ""
       })
-      navigate('/login');
+      navigate("/")
     }
   )
   .catch((error) => {
     console.error('Registration failed:', error);
-
     if (error.response && error.response.status === 400) {
       const responseData = error.response.data;
-      console.log('Response Data:', responseData); 
-      if (responseData && responseData.message != "Email must be unique") {
+      if (responseData && responseData === "Email must be unique") {
         setMessage('Email address is already registered. Please use another.');
-      } else if (responseData && responseData.message != "Login ID must be unique") {
+      } else if (responseData && responseData === "Login ID must be unique") {
         setMessage('Login ID already exists. Please choose another.');
       } else {
+        setMessage('Registration failed. Please try again.');
       }
     } else {
       setMessage('Registration failed. Please try again.');
@@ -82,7 +70,7 @@ export default function Register() {
         <br/>
         <input value={Registers.loginId}  name="loginId" type="text" placeholder="Login ID" onChange={handle} required/>
         <br/>
-        <input value={Registers.password}  name="password" type="password" placeholder="Password" autoComplete="password" onChange={handle} required />
+        <input value={Registers.password}  name="password" type="text" placeholder="Password" autoComplete="password" onChange={handle} required />
         <br/>
         <input  value={Registers.address} name="address" type="address" placeholder="Address" onChange={handle} required/>
         <br/>
@@ -93,3 +81,4 @@ export default function Register() {
 </div>
   )
 }
+

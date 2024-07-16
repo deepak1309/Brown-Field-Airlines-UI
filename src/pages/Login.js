@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import travel from "../asserts/images/travel.jpg"
-import axios from 'axios';
-import '../asserts/css/Login.css'
-// import { login } from '../Service/Register'
+import "../asserts/css/Login.css"
 import { login } from '../Service/Login';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
 
+  const navigate=useNavigate()
   const [Loggin, setLoggin] = useState({
     loginId:"",
     password:""
@@ -19,29 +18,20 @@ let handleId=(e)=>{
   const {name,value}=e.target
   setLoggin({...Loggin,[name]:value})
 }
-const navigate = useNavigate();
 
 let handlelog=(e)=>{
   e.preventDefault();
-//  login(Loggin).then((res)=>{
-//   const token=res.data
-//   localStorage.setItem("token",token)
-//     console.log(token)
-//     setmessage("Logged In Successfully")
-//     setLoggin(res.data)
-//   }) .catch((error) => {
-//     console.error('Login failed:', error);
-//     setmessage("Invalid LoginId or Password.Please try again"); 
-//   });
-
-
-
-
-    navigate('/searchPage');
-          
-    
-
-
+ login(Loggin).then((res)=>{
+  const token=res.data
+  localStorage.setItem("token",token)
+    console.log(token)
+    setmessage("Logged In Successfully")
+    setLoggin(res.data)
+    navigate("/searchPage")
+  }) .catch((error) => {
+    console.error('Login failed:', error);
+    setmessage("Invalid LoginId or Password.Please try again"); // Set error message for unsuccessful login
+  });
 
 }
 
@@ -60,7 +50,7 @@ let handlelog=(e)=>{
     <br>
     </br>
     <div className='password'>
-    <a class="nav-link" href='/forgotPassword'>Forgot Password</a>
+    <a class="nav-link" href='/forgot'>Forgot Password</a>
     <a class="nav-link" style={{marginLeft:"235px", marginTop:"-7%", color:"black"}} href='/register'>New User</a>
     </div>
     {message && <p className='message'>{message}</p>} 
