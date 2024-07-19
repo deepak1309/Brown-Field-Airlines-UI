@@ -24,7 +24,7 @@ function App() {
         <Route path="/results" element={<ResultsPage />} />
         <Route path="/flight/:id" element={<FlightCard />} />
         <Route path="resetPassword/:email" element={<ResetPassword />} />
-        <Route path="Admin" element={<Admin />} />
+        <Route path="/Admin" element={<Admin />} />
         </Routes>
        </Router>
     </div>

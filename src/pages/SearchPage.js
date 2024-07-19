@@ -58,6 +58,7 @@ const SearchPage = () => {
   };
 
   const handleSearch = () => {
+    
     navigate('/results');
   };
 

@@ -3,7 +3,10 @@ import React from 'react'
 
 
 
+
 export default function Navbar() {
+
+  
   return (
 <div className='nav'>
 <nav class="navbar navbar-expand-lg bg-body-tertiary" style={{height:"60px",width:"1400px", margin:"2px"}}>
@@ -32,7 +35,9 @@ export default function Navbar() {
         </li>
         <li class="nav-item" style={{margin:"2px"}}>
           <button class="btn btn-info">
-            Book Now
+           <a className="nav-link btn btn-info" href='/Admin'>
+             Admin
+           </a>
           </button>
         </li>
       </ul>
