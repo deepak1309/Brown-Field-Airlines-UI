@@ -9,6 +9,7 @@ import SearchPage from './pages/SearchPage';
 import ResultsPage from './pages/ResultsPage';
 import FlightCard from './pages/FlightCard';
 import ResetPassword from './pages/ResetPassword';
+import Admin from './pages/Admin';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/results" element={<ResultsPage />} />
         <Route path="/flight/:id" element={<FlightCard />} />
         <Route path="resetPassword/:email" element={<ResetPassword />} />
+        <Route path="Admin" element={<Admin />} />
         </Routes>
        </Router>
     </div>
