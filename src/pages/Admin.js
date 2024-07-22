@@ -7,7 +7,7 @@ const AdminDetails = () => {
   const [fareDetails, setFareDetails] = useState([]);
 
   const [aircraft, setAircraft] = useState({ flightname: '', flightmodel: '', capacity: '' });
-  const [flight, setFlight] = useState({ AirlineName: '',departureTime: '', arrivalTime: '', source: '', destination: '' });
+  const [flight, setFlight] = useState({  FlightNumber: '', AirlineName: '', departureTime: '', arrivalTime: '', source: '', destination: '', AircraftId: '' });
   const [fare, setFare] = useState({ flightId: '', classType: '', price: ''});
 
   const handleAddAircraft = () => {
@@ -17,7 +17,7 @@ const AdminDetails = () => {
 
   const handleAddFlight = () => {
     setFlightDetails([...flightDetails, flight]);
-    setFlight({ AirlineName: '', departureTime: '', arrivalTime: '', source: '', destination: '' });
+    setFlight({ FlightNumber: '', AirlineName: '', departureTime: '', arrivalTime: '', source: '', destination: '' ,  AircraftId: '' });
   };
 
   const handleAddFare = () => {
@@ -74,26 +74,36 @@ const AdminDetails = () => {
       <table>
         <thead>
           <tr>
+          <th>Flight Number</th>
             <th>AirlineName</th>
             <th>Departure Time</th>
             <th>Arrival Time</th>
             <th>Source</th>
             <th>Destination</th>
+            <th>Aircraft Id</th>
           </tr>
         </thead>
         <tbody>
           {flightDetails.map((detail, index) => (
             <tr key={index}>
+              <td>{detail.FlightNumber}</td>
               <td>{detail.AirlineName}</td>
               <td>{detail.departureTime}</td>
               <td>{detail.arrivalTime}</td>
               <td>{detail.source}</td>
               <td>{detail.destination}</td>
+              <td>{detail.AircraftId}</td>
             </tr>
           ))}
         </tbody>
       </table>
       <div className="input-container">
+      <input
+          type="text"
+          placeholder="Flight Number"
+          value={flight.FlightNumber}
+          onChange={(e) => setFlight({ ...flight, FlightNumber: e.target.value })}
+        />
       <input
           type="text"
           placeholder="Airline Name"
@@ -123,6 +133,12 @@ const AdminDetails = () => {
           placeholder="Destination"
           value={flight.destination}
           onChange={(e) => setFlight({ ...flight, destination: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="Aircraft Id"
+          value={flight.AircraftId}
+          onChange={(e) => setFlight({ ...flight, AircraftId: e.target.value })}
         />
         <button onClick={handleAddFlight}>Add Flight</button>
       </div>
