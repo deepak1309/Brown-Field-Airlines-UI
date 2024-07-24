@@ -10,10 +10,12 @@ import ResultsPage from './pages/ResultsPage';
 import FlightCard from './pages/FlightCard';
 import ResetPassword from './pages/ResetPassword';
 import Admin from './pages/Admin';
+import { FlightProvider } from './pages/Context/FlightContextProvide';
 
 function App() {
   return (
     <div className=""  >
+      <FlightProvider>
        <Navbar/>
        <Router>
         <Routes>
@@ -27,6 +29,7 @@ function App() {
         <Route path="/Admin" element={<Admin />} />
         </Routes>
        </Router>
+       </FlightProvider>
     </div>
   );
 }

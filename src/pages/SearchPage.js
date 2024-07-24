@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Container,
   CssBaseline,
@@ -17,12 +17,14 @@ import {
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import { useNavigate } from "react-router-dom";
 import SearchService from "../Service/SearchService";
+import ResultsPage from "./ResultsPage";
 import "../asserts/css/SearchPage.css";
+import { FlightContext } from "./Context/FlightContextProvide";
 
 const airports = [
   {
     city: "Mumbai",
-    code: "BOM",
+    code: "Mumbai, BOM - Chhatrapati Shivaji International Airport",
     airport: "Chhatrapati Shivaji International Airport",
   },
   {
@@ -32,7 +34,7 @@ const airports = [
   },
   {
     city: "Bengaluru",
-    code: "BLR",
+    code: "Bengaluru, BLR - Kempegowda International Airport",
     airport: "Kempegowda International Airport",
   },
   { city: "Pune", code: "PNQ", airport: "Pune Airport" },
@@ -87,6 +89,7 @@ const airports = [
 ];
 
 const SearchPage = () => {
+  const { setFlightResults } = useContext(FlightContext);
   const [tripType, setTripType] = useState("oneWay");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
@@ -94,6 +97,7 @@ const SearchPage = () => {
   const [returnDate, setReturnDate] = useState("");
   const [fareClass, setFareClass] = useState("economy");
   const [travelers, setTravelers] = useState("1");
+  const [flightData, setFlightData] = useState([]);
   const navigate = useNavigate();
 
   const handleTripTypeChange = (event) => {
@@ -125,6 +129,7 @@ const SearchPage = () => {
             );
 
       console.log("Search Results:", data);
+      setFlightResults(data);
       navigate("/results", { state: { searchResults: data } });
     } catch (error) {
       console.error("There was a problem with the search operation:", error);
@@ -132,6 +137,7 @@ const SearchPage = () => {
   };
 
   return (
+    <>
     <Container component="main">
       <CssBaseline />
       <Paper elevation={3} className="paper">
@@ -313,6 +319,7 @@ const SearchPage = () => {
         </Box>
       </Paper>
     </Container>
+    </>
   );
 };
 
