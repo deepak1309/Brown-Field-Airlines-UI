@@ -1,30 +1,106 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../asserts/css/Admin.css';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const AdminDetails = () => {
-  const [aircraftDetails, setAircraftDetails] = useState([]);
-  const [flightDetails, setFlightDetails] = useState([]);
-  const [fareDetails, setFareDetails] = useState([]);
+ const {id}= useParams()
+  const [aircraftDetails, setAircraftDetails] = useState({
+    "name": "",
+"model": "",
+"capacity": ""
+  });
+  const [flightDetails, setFlightDetails] = useState({
+    "id":"",
+    "flightNumber": "",
+   "departureTime": "",
+   "arrivalTime": "",
+   "source": "",   
+   "destination": "",
+   "aircraft": {"id": 0 }
+  });
+  const [fareDetails, setFareDetails] = useState({
+    "flight": {"id": 0},
+   "fareClass": "",
+   "price":0
+  });
 
-  const [aircraft, setAircraft] = useState({ flightname: '', flightmodel: '', capacity: '' });
-  const [flight, setFlight] = useState({  FlightNumber: '', AirlineName: '', departureTime: '', arrivalTime: '', source: '', destination: '', AircraftId: '' });
-  const [fare, setFare] = useState({ flightId: '', classType: '', price: ''});
+  const [aircraft, setAircraft] = useState([]);
+  const [flights, setFlights] = useState([]);
 
-  const handleAddAircraft = () => {
-    setAircraftDetails([...aircraftDetails, aircraft]);
-    setAircraft({ flightname: '', flightmodel: '', capacity: '' });
+  // const [flight, setFlight] = useState({ AirlineName: '',departureTime: '', arrivalTime: '', source: '', destination: '' });
+  // const [fare, setFare] = useState({ flightId: '', classType: '', price: ''});
+
+  const handleAddAircraft = (e) => {
+    const {name , value}=e.target
+    setAircraftDetails({...aircraftDetails,[name]:value });
   };
 
-  const handleAddFlight = () => {
-    setFlightDetails([...flightDetails, flight]);
-    setFlight({ FlightNumber: '', AirlineName: '', departureTime: '', arrivalTime: '', source: '', destination: '' ,  AircraftId: '' });
+  const handleAircraft=(e)=>{
+    e.preventDefault()
+    axios.post("http://localhost:8080/api/aircraft",aircraftDetails).then(
+      (res)=>{
+        console.log(res.data)
+        setAircraftDetails(res.data)
+      }
+    )
+  }
+
+
+  const deleteair=(id)=>{
+    axios.delete(`http://localhost:8080/api/aircraft/${id}`).then((res)=>{
+      console.log(res.data)
+    })
+  }
+ 
+  useEffect(() => {
+    setTimeout(() => {
+      axios.get("http://localhost:8080/api/aircraft",aircraft).then(
+        (res)=>{
+          console.log(res.data)
+          setAircraft(res.data)
+        })
+    }, 100);
+}, [])
+
+
+
+  const handleAddFlight = (e) => {
+    const {name , value}=e.target
+    setFlightDetails({...flightDetails, [name]:value});
+   
   };
 
-  const handleAddFare = () => {
-    setFareDetails([...fareDetails, fare]);
-    setFare({flightId: '', classType: '', price: '' });
+
+
+const handlegetFlight=()=>{
+  axios.get(`http://localhost:8080/flights/${flightDetails.id}`).then(
+          (res)=>{
+            console.log(res.data)
+            setFlightDetails(res.data)
+          })
+}
+
+  const handleFlight=()=>{
+    axios.post("http://localhost:8080/flights",flightDetails).then(
+      (res)=>{
+        console.log(res.data)
+      }
+    )
+  }
+
+  const handleAddFare = (e) => {
+    const {name , value}=e.target
+    setFareDetails({...fareDetails,[name]:value });
   };
 
+  const handleFare=()=>{
+    axios.post("http://localhost:8080/api/fares/add",fareDetails).then(
+      (res)=>{
+        console.log(res.data)
+      }
+    )
+  }
   return (
     <div className="admin-details-container">
       <h2>ADMIN</h2>
@@ -39,11 +115,12 @@ const AdminDetails = () => {
           </tr>
         </thead>
         <tbody>
-          {aircraftDetails.map((detail, index) => (
+          {aircraft.map((detail, index) => (
             <tr key={index}>
               <td>{detail.name}</td>
               <td>{detail.model}</td>
               <td>{detail.capacity}</td>
+              <td><button onClick={deleteair}>Delete</button></td>
             </tr>
           ))}
         </tbody>
@@ -52,95 +129,93 @@ const AdminDetails = () => {
         <input
           type="text"
           placeholder="Name"
-          value={aircraft.name}
-          onChange={(e) => setAircraft({ ...aircraft, name: e.target.value })}
+          name='name'
+          onChange={handleAddAircraft}
         />
         <input
           type="int"
+          name='model'
           placeholder="Model"
-          value={aircraft.model}
-          onChange={(e) => setAircraft({ ...aircraft, model: e.target.value })}
+          onChange={handleAddAircraft}
         />
         <input
           type="text"
           placeholder="Capacity"
-          value={aircraft.capacity}
-          onChange={(e) => setAircraft({ ...aircraft, capacity: e.target.value })}
+          name='capacity'
+          onChange={handleAddAircraft}
         />
-        <button onClick={handleAddAircraft}>Add Aircraft</button>
+        <button onClick={handleAircraft}>Add Aircraft</button>
       </div>
 
       <h3>Flight Details</h3>
+      <input    type="text"
+          placeholder="ID"
+          name='id'
+          onChange={handleAddFlight}/>
+          <button onClick={handlegetFlight}>GET</button>
       <table>
         <thead>
           <tr>
-          <th>Flight Number</th>
-            <th>AirlineName</th>
+            <th>AirlineNumber</th>
             <th>Departure Time</th>
             <th>Arrival Time</th>
             <th>Source</th>
             <th>Destination</th>
-            <th>Aircraft Id</th>
           </tr>
         </thead>
         <tbody>
-          {flightDetails.map((detail, index) => (
-            <tr key={index}>
-              <td>{detail.FlightNumber}</td>
-              <td>{detail.AirlineName}</td>
-              <td>{detail.departureTime}</td>
-              <td>{detail.arrivalTime}</td>
-              <td>{detail.source}</td>
-              <td>{detail.destination}</td>
-              <td>{detail.AircraftId}</td>
+          {/* {flightDetails.map((detail, index) => ( */}
+            <tr key={flightDetails.id}>
+              <td>{flightDetails.flightNumber}</td>
+              <td>{flightDetails.departureTime}</td>
+              <td>{flightDetails.arrivalTime}</td>
+              <td>{flightDetails.source}</td>
+              <td>{flightDetails.destination}</td>
             </tr>
-          ))}
+          {/* ))} */}
         </tbody>
       </table>
       <div className="input-container">
       <input
           type="text"
-          placeholder="Flight Number"
-          value={flight.FlightNumber}
-          onChange={(e) => setFlight({ ...flight, FlightNumber: e.target.value })}
-        />
-      <input
-          type="text"
           placeholder="Airline Name"
-          value={flight.AirlineName}
-          onChange={(e) => setFlight({ ...flight, AirlineName: e.target.value })}
+          name="flightNumber"
+          onChange={handleAddFlight}
         />
         <input
           type="text"
           placeholder="Departure Time"
-          value={flight.departureTime}
-          onChange={(e) => setFlight({ ...flight, departureTime: e.target.value })}
+          name="departureTime"
+          onChange={handleAddFlight}
         />
         <input
           type="text"
           placeholder="Arrival Time"
-          value={flight.arrivalTime}
-          onChange={(e) => setFlight({ ...flight, arrivalTime: e.target.value })}
+          name="arrivalTime"
+          onChange={handleAddFlight}
         />
         <input
           type="text"
           placeholder="Source"
-          value={flight.source}
-          onChange={(e) => setFlight({ ...flight, source: e.target.value })}
+          name="source"
+          onChange={handleAddFlight}
         />
         <input
           type="text"
           placeholder="Destination"
-          value={flight.destination}
-          onChange={(e) => setFlight({ ...flight, destination: e.target.value })}
+          name="destination"
+          onChange={handleAddFlight}
         />
-        <input
+          <input
           type="text"
-          placeholder="Aircraft Id"
-          value={flight.AircraftId}
-          onChange={(e) => setFlight({ ...flight, AircraftId: e.target.value })}
+          placeholder="Id"
+          name="id"
+          onChange={(e) => setFlightDetails({
+            ...flightDetails,
+            aircraft: { id: e.target.value }
+          })}
         />
-        <button onClick={handleAddFlight}>Add Flight</button>
+        <button onClick={handleFlight}>Add Flight</button>
       </div>
 
       <h3>Fare Details</h3>
@@ -153,35 +228,35 @@ const AdminDetails = () => {
           </tr>
         </thead>
         <tbody>
-          {fareDetails.map((detail, index) => (
+          {/* {fareDetails.map((detail, index) => (
             <tr key={index}>
               <td>{detail.flightId}</td>
               <td>{detail.classType}</td>
               <td>{detail.price}</td>
             </tr>
-          ))}
+          ))} */}
         </tbody>
       </table>
       <div className="input-container">
         <input
           type="text"
           placeholder="Flight ID"
-          value={fare.flightId}
-          onChange={(e) => setFare({ ...fare, flightId: e.target.value })}
+          name='flight'
+          onChange={(e)=>setFareDetails({...fareDetails,flight:{ id: e.target.value }})}
         />
         <input
           type="text"
           placeholder="Class"
-          value={fare.classType}
-          onChange={(e) => setFare({ ...fare, classType: e.target.value })}
+          name="fareClass"
+          onChange={handleAddFare}
         />
         <input
           type="text"
           placeholder="Price"
-          value={fare.price}
-          onChange={(e) => setFare({ ...fare, price: e.target.value })}
+          name="price"
+          onChange={handleAddFare}
         />
-        <button onClick={handleAddFare}>Add Fare</button>
+        <button onClick={handleFare}>Add Fare</button>
       </div>
     </div>
   );

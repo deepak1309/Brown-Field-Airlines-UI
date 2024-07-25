@@ -24,7 +24,7 @@ import { FlightContext } from "./Context/FlightContextProvide";
 const airports = [
   {
     city: "Mumbai",
-    code: "Mumbai, BOM - Chhatrapati Shivaji International Airport",
+    code: " BOM - Chhatrapati Shivaji International Airport",
     airport: "Chhatrapati Shivaji International Airport",
   },
   {
@@ -34,7 +34,7 @@ const airports = [
   },
   {
     city: "Bengaluru",
-    code: "Bengaluru, BLR - Kempegowda International Airport",
+    code: "BLR - Kempegowda International Airport",
     airport: "Kempegowda International Airport",
   },
   { city: "Pune", code: "PNQ", airport: "Pune Airport" },
@@ -95,7 +95,7 @@ const SearchPage = () => {
   const [to, setTo] = useState("");
   const [departureDate, setDepartureDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
-  const [fareClass, setFareClass] = useState("economy");
+  const [fareClass, setFareClass] = useState("");
   const [travelers, setTravelers] = useState("1");
   const [flightData, setFlightData] = useState([]);
   const navigate = useNavigate();
@@ -178,7 +178,7 @@ const SearchPage = () => {
                 onChange={(e) => setFrom(e.target.value)}
               >
                 {airports.map((airport) => (
-                  <MenuItem key={airport.code} value={airport.code}>
+                  <MenuItem key={airport.code} value={airport.city}>
                     {airport.city}, {airport.code} - {airport.airport}
                   </MenuItem>
                 ))}
@@ -197,7 +197,7 @@ const SearchPage = () => {
                 onChange={(e) => setTo(e.target.value)}
               >
                 {airports.map((airport) => (
-                  <MenuItem key={airport.code} value={airport.code}>
+                  <MenuItem key={airport.code} value={airport.city}>
                     {airport.city}, {airport.code} - {airport.airport}
                   </MenuItem>
                 ))}
@@ -255,7 +255,7 @@ const SearchPage = () => {
                 value={fareClass}
                 onChange={(e) => setFareClass(e.target.value)}
               >
-                <MenuItem value="economy">Economy</MenuItem>
+                <MenuItem value="ECONOMY">Economy</MenuItem>
                 <MenuItem value="business">Business</MenuItem>
               </TextField>
             </Grid>
