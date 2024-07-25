@@ -1,7 +1,11 @@
 {
     "emails": [
+        {"id": 1, "emailaddress": "test@gmail.com"},
+        {"id": 1, "emailaddress": "raj@yahoo.com"},
+        {"id": 1, "emailaddress": "john@gmail.com"},
         "test@gmail.com",
         "raj@yahoo.com",
         "john@gmail.com"
-    ]
+
+        ]
   }
