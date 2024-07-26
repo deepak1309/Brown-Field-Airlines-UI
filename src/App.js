@@ -11,6 +11,7 @@ import FlightCard from './pages/FlightCard';
 import ResetPassword from './pages/ResetPassword';
 import Admin from './pages/Admin';
 import { FlightProvider } from './pages/Context/FlightContextProvide';
+import Results from './pages/Results';
 
 function App() {
   return (
@@ -24,7 +25,8 @@ function App() {
           <Route path='/forgotPassword' element={<Forgot/>}/>
           <Route path="/searchPage" element={<SearchPage/>} />
         <Route path="/results" element={<ResultsPage />} />
-        <Route path="/flight/:id" element={<FlightCard />} />
+        <Route path="/results1" element={<Results />} />
+        <Route path="/flight/:flightNumber" element={<FlightCard />} />
         <Route path="resetPassword/:email" element={<ResetPassword />} />
         <Route path="/Admin" element={<Admin />} />
         </Routes>

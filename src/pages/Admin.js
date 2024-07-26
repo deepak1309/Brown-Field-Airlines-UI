@@ -71,10 +71,16 @@ const AdminDetails = () => {
    
   };
 
-
+useEffect(() => {
+  axios.get("http://localhost:8080/flights",flights).then(
+    (res)=>{
+      console.log(res.data)
+      setFlights(res.data)
+    })
+}, [])
 
 const handlegetFlight=()=>{
-  axios.get(`http://localhost:8080/flights/${flightDetails.id}`).then(
+  axios.get(`http://localhost:8080/flights/getBy/${flightDetails.flightNumber}`).then(
           (res)=>{
             console.log(res.data)
             setFlightDetails(res.data)
@@ -150,10 +156,28 @@ const handlegetFlight=()=>{
       <h3>Flight Details</h3>
       <input    type="text"
           placeholder="ID"
-          name='id'
+          name='flightNumber'
           onChange={handleAddFlight}/>
           <button onClick={handlegetFlight}>GET</button>
-      <table>
+          <table>
+        <thead>
+          <tr>
+            <th>AirlineNumber</th>
+            <th>Departure Time</th>
+            <th>Arrival Time</th>
+            <th>Source</th>
+            <th>Destination</th>
+          </tr>
+        </thead>
+        <tr key={flightDetails.id}>
+              <td>{flightDetails.flightNumber}</td>
+              <td>{flightDetails.departureTime}</td>
+              <td>{flightDetails.arrivalTime}</td>
+              <td>{flightDetails.source}</td>
+              <td>{flightDetails.destination}</td>
+            </tr>
+        
+      {/* <table> */}
         <thead>
           <tr>
             <th>AirlineNumber</th>
@@ -164,14 +188,25 @@ const handlegetFlight=()=>{
           </tr>
         </thead>
         <tbody>
+          {flights.map((Details, index) => (
+            <tr>
+              <td>{Details.flightNumber}</td>
+              <td>{Details.departureTime}</td>
+              <td>{Details.arrivalTime}</td>
+              <td>{Details.source}</td>
+              <td>{Details.destination}</td>
+            </tr>
+          ))}
+        </tbody>
+        <tbody>
           {/* {flightDetails.map((detail, index) => ( */}
-            <tr key={flightDetails.id}>
+            {/* <tr key={flightDetails.id}>
               <td>{flightDetails.flightNumber}</td>
               <td>{flightDetails.departureTime}</td>
               <td>{flightDetails.arrivalTime}</td>
               <td>{flightDetails.source}</td>
               <td>{flightDetails.destination}</td>
-            </tr>
+            </tr> */}
           {/* ))} */}
         </tbody>
       </table>

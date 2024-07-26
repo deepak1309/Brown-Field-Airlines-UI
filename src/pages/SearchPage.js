@@ -15,11 +15,12 @@ import {
   Paper,
 } from "@mui/material";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SearchService from "../Service/SearchService";
 import ResultsPage from "./ResultsPage";
 import "../asserts/css/SearchPage.css";
 import { FlightContext } from "./Context/FlightContextProvide";
+
 
 const airports = [
   {
@@ -89,9 +90,12 @@ const airports = [
 ];
 
 const SearchPage = () => {
+  // const {id}=useParams()/
   const { setFlightResults } = useContext(FlightContext);
   const [tripType, setTripType] = useState("oneWay");
+  const {setFlight} = useContext(FlightContext);
   const [from, setFrom] = useState("");
+  const [id, setid] = useState("");
   const [to, setTo] = useState("");
   const [departureDate, setDepartureDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
@@ -130,7 +134,13 @@ const SearchPage = () => {
 
       console.log("Search Results:", data);
       setFlightResults(data);
-      navigate("/results", { state: { searchResults: data } });
+      // setFlight(data)
+      if(tripType==="oneWay")
+        {
+          navigate("/results", { state: { searchResults: data } });
+        }else{
+          navigate("/results1", { state: { searchResults: data } });
+        }
     } catch (error) {
       console.error("There was a problem with the search operation:", error);
     }

@@ -1,7 +1,7 @@
 // src/services/resultsService.js
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/flights"; // Replace with your API URL
+const API_URL = "http://localhost:8080/api/flights"; 
 
 export const fetchFlightResults = async (searchParams) => {
   try {
