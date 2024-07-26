@@ -35,6 +35,20 @@ const Results = () => {
     fetchResults();
   }, [searchParams, setFlightResults]);
 
+  const handleViewPrices = async (flightNumber) => {
+    try {
+      const flight = flightResults.find(flight => flight.flightNumber === flightNumber);
+      console.log(flight)
+      if (flight) {
+        localStorage.setItem(`flight_${flightNumber}`, JSON.stringify(flight));
+        setSelectedFlight(flight );
+        navigate(`/flight/${flightNumber}`);
+      }
+    } catch (error) {
+      console.error('Error fetching flight details:', error);
+      alert("Failed to fetch flight details");
+    }
+  };
 
   const handleViewPrice = async (flightNumber) => {
     try {
@@ -79,51 +93,12 @@ const Results = () => {
       Flight Results
     </Typography>
     {flightResults.length ? (
-       <div>
-       <h3>Outbound Flights</h3>
-       <ul>
-         {flightResults.outboundFlights.map(flight => (
-          <Paper key={flight.id} elevation={3} className="flight-card">
-          <Grid container spacing={2}>
-          <Typography>{flight.date}</Typography>
-            <Grid item xs={12} sm={2}>
-              <Typography>{flight.name}</Typography>
-              <Typography>{flight.flightNumber}</Typography>
-            </Grid>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <Grid item xs={12} sm={2}>
-              <Typography>{flight.departureTime}</Typography>
-              <Typography>{flight.source}</Typography>
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              <Typography>{flight.duration}</Typography>
-              <Typography>Non-stop</Typography>
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              <Typography>{flight.arrivalTime}</Typography>
-              <Typography>{flight.destination}</Typography>
-            </Grid>
-            
-            <Grid item xs={12} sm={2}>
-              <Typography>{flight.price}</Typography>
-              <Button
-                variant="outlined"
-                onClick={() => handleViewPricess(flight.flightNumber,'outboundFlights')}
-              >
-                VIEW
-              </Button>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography className="discount">{flight.discount}</Typography>
-            </Grid>
-          </Grid>
-        </Paper>
-         ))}
-       </ul>
-       
-       <h3>Return Flights</h3>
-       <ul>
-         {flightResults.returnFlights.map(flight => (
+      <Typography></Typography>
+    ) : (
+      <div>
+        <h3>Outbound Flights</h3>
+        <ul>
+          {flightResults.outboundFlights.map(flight => (
            <Paper key={flight.id} elevation={3} className="flight-card">
            <Grid container spacing={2}>
            <Typography>{flight.date}</Typography>
@@ -149,7 +124,7 @@ const Results = () => {
                <Typography>{flight.price}</Typography>
                <Button
                  variant="outlined"
-                 onClick={() => handleViewPrice(flight.flightNumber,'returnFlights')}
+                 onClick={() => handleViewPricess(flight.flightNumber,'outboundFlights')}
                >
                  VIEW
                </Button>
@@ -159,13 +134,50 @@ const Results = () => {
              </Grid>
            </Grid>
          </Paper>
-         ))}
-       </ul>
-     </div>
-    ) : (
-    
-       
-     <Typography>No Flights Found</Typography>
+          ))}
+        </ul>
+        
+        <h3>Return Flights</h3>
+        <ul>
+          {flightResults.returnFlights.map(flight => (
+            <Paper key={flight.id} elevation={3} className="flight-card">
+            <Grid container spacing={2}>
+            <Typography>{flight.date}</Typography>
+              <Grid item xs={12} sm={2}>
+                <Typography>{flight.name}</Typography>
+                <Typography>{flight.flightNumber}</Typography>
+              </Grid>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <Grid item xs={12} sm={2}>
+                <Typography>{flight.departureTime}</Typography>
+                <Typography>{flight.source}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                <Typography>{flight.duration}</Typography>
+                <Typography>Non-stop</Typography>
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                <Typography>{flight.arrivalTime}</Typography>
+                <Typography>{flight.destination}</Typography>
+              </Grid>
+              
+              <Grid item xs={12} sm={2}>
+                <Typography>{flight.price}</Typography>
+                <Button
+                  variant="outlined"
+                  onClick={() => handleViewPrice(flight.flightNumber,'returnFlights')}
+                >
+                  VIEW
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography className="discount">{flight.discount}</Typography>
+              </Grid>
+            </Grid>
+          </Paper>
+          ))}
+        </ul>
+      </div>
   
   )
 }
