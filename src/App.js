@@ -25,7 +25,7 @@ function App() {
           <Route path='/forgotPassword' element={<Forgot/>}/>
           <Route path="/searchPage" element={<SearchPage/>} />
         <Route path="/results" element={<ResultsPage />} />
-        <Route path="/results1" element={<Results />} />
+        <Route path="/results" element={<Results />} />
         <Route path="/flight/:flightNumber" element={<FlightCard />} />
         <Route path="resetPassword/:email" element={<ResetPassword />} />
         <Route path="/Admin" element={<Admin />} />

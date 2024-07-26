@@ -266,7 +266,7 @@ const SearchPage = () => {
                 onChange={(e) => setFareClass(e.target.value)}
               >
                 <MenuItem value="ECONOMY">Economy</MenuItem>
-                <MenuItem value="business">Business</MenuItem>
+                <MenuItem value="BUSINESS">Business</MenuItem>
               </TextField>
             </Grid>
           </Grid>
@@ -280,7 +280,7 @@ const SearchPage = () => {
             >
               <Box className="fare-option">
                 <FormControlLabel
-                  value="economy"
+                  value="ECONOMY"
                   control={<Radio />}
                   label="Economy"
                 />
@@ -288,7 +288,7 @@ const SearchPage = () => {
               </Box>
               <Box className="fare-option">
                 <FormControlLabel
-                  value="business"
+                  value="BUSINESS"
                   control={<Radio />}
                   label="Business"
                 />
