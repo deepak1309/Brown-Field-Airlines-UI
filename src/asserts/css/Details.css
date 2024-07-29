@@ -1,0 +1,37 @@
+.main {
+    background-color: whitesmoke;
+    height: 600px;
+    margin: auto;
+    width: 55%;
+    padding: 10px;
+    margin-top: 10px;
+   
+  }
+  table {
+    border: 2px solid forestgreen;
+    width: 500px;
+   margin: auto;
+  }
+  
+  th {
+    border-bottom: 1px solid black;
+  }
+  
+  td {
+    text-align: center;
+  }
+  .button {
+    background-color: #04AA6D; /* Green */
+    border: none;
+    color: white;
+    padding: 5px;
+    width:100px;
+    margin-top: -5px;
+    border-radius: 5px;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+  }
+  span{
+    font-size: 12px;
+  }

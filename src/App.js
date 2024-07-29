@@ -12,7 +12,7 @@ import ResetPassword from './pages/ResetPassword';
 import Admin from './pages/Admin';
 import { FlightProvider } from './pages/Context/FlightContextProvide';
 import Results from './pages/Results';
-
+import Details from './pages/Details'
 function App() {
   return (
     <div className=""  >
@@ -29,6 +29,7 @@ function App() {
         <Route path="/flight/:flightNumber" element={<FlightCard />} />
         <Route path="resetPassword/:email" element={<ResetPassword />} />
         <Route path="/Admin" element={<Admin />} />
+        <Route path="/details" element={<Details/>}/>
         </Routes>
        </Router>
        </FlightProvider>

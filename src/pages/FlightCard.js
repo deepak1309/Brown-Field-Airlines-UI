@@ -1,8 +1,12 @@
 import React, { useContext } from "react";
+import { useNavigate } from 'react-router-dom';
 import { FlightContext } from "./Context/FlightContextProvide";
 import "../asserts/css/FlightCard.css";
 
 function FlightCard() {
+  const navigate = useNavigate();
+  const handleClick = () => navigate('/details');
+
   const { SelectedFlight } = useContext(FlightContext);
 
   if (!SelectedFlight) {
@@ -57,6 +61,7 @@ function FlightCard() {
           <span>Price:</span>
           <span className="price-value">{SelectedFlight.price}</span>
         </div>
+        <button type="button" onClick={handleClick}>Continue</button>
       </div>
     </div>
   );
