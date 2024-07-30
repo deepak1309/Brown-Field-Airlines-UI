@@ -1,252 +1,207 @@
-import React, { useState } from "react";
-import { Button } from "react-bootstrap";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import '../asserts/css/Details.css';
+import axios from 'axios';
+import React, { useState } from 'react';
+import { Button, Table, Container, Row, Col } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../asserts/css/Details.css'
 
-const Traveller = () => {
-    
-  const initialData = [
-    {
-      id: 1,
-      firstname: "Prashanth",
-      lastname: "Sharma",
-      email: "prashanth@gmail.com",
-      phone: "1234567890",
-      gender: "Male",
-    },
-    {
-      id: 2,
-      firstname: "Jane",
-      lastname: "Smith",
-      email: "jane.smith@example.com",
-      phone: "0987654321",
-      gender: "Female",
-    },
-  ];
+export default function AddPassenger() {
+    const [passenger, setPassenger] = useState({
+        name: '',
+        email: '',
+        phoneNumber: '',
+        gender: ''
+    });
 
-  const [inputarr, setInputarr] = useState(initialData);
-  const [idCounter, setIdCounter] = useState(initialData.length + 1);
-  const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState({});
 
-  const [values, setValues] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    phone: "",
-    gender: "",
-  });
+    const [addedPassengers, setAddedPassengers] = useState([]);
 
-  const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setPassenger(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
 
-  const validate = () => {
-    let errors = {};
-    if (!values.firstname.trim()) {
-      errors.firstname = "First name is required";
-    }
-    if (!values.lastname.trim()) {
-      errors.lastname = "Last name is required";
-    }
-    if (!values.gender) {
-      errors.gender = "Gender is required";
-    }
-    if (!values.email) {
-      errors.email = "Email is required";
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-      errors.email = "Email address is invalid";
-    }
-    if (!values.phone) {
-      errors.phone = "Phone number is required";
-    } else if (!/^\d{10}$/.test(values.phone)) {
-      errors.phone = "Phone number is invalid";
-    }
-    return errors;
-  };
+    const validateForm = () => {
+        const newErrors = {};
+        if (!passenger.name) newErrors.name = 'Name is required';
+        if (!passenger.email) {
+            newErrors.email = 'Email is required';
+        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(passenger.email)) {
+            newErrors.email = 'Email address is invalid';
+        }
+        if (!passenger.phoneNumber) {
+            newErrors.phoneNumber = 'Phone Number is required';
+        } else if (!/^\d{10}$/.test(passenger.phoneNumber)) {
+            newErrors.phoneNumber = 'Phone Number must be 10 digits';
+        }
+        if (!passenger.gender) newErrors.gender = 'Gender is required';
+        return newErrors;
+    };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length === 0) {
-      const newUser = {
-        id: idCounter,
-        firstname: values.firstname,
-        lastname: values.lastname,
-        email: values.email,
-        phone: values.phone,
-        gender: values.gender,
-      };
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
+        const validationErrors = validateForm();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
 
-        setInputarr([...inputarr, newUser]);
-        setIdCounter(idCounter + 1);
-        setValues({
-          firstname: "",
-          lastname: "",
-          email: "",
-          phone: "",
-          gender: "",
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('No authentication token found.');
+            return;
+        }
+
+        axios.post("http://localhost:8080/api/addPassengerList", [passenger], {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(res => {
+            console.log('Passenger added successfully:', res.data);
+            setAddedPassengers(prevList => [...prevList, passenger]);
+            setPassenger({
+                name: '',
+                email: '',
+                phoneNumber: '',
+                gender: ''
+            });
+            setErrors({});
+        })
+        .catch(error => {
+            console.error('Error adding passenger list:', error.response ? error.response.data : error.message);
         });
-        setErrors({});
-        alert("Form submitted successfully");
-      } 
-  else {
-      setErrors(validationErrors);
-    }
-  };
+    };
 
-  return (
-    <>
-      <div className="main">
-        <h5 style={{ marginLeft: "12px", padding: "3px" }}>
-          Traveller Details
-        </h5>
-        <p style={{ marginLeft: "17px" }}>
-          Adult(12 yrs+)
-        </p>
-        <form
-          onSubmit={handleSubmit}
-          style={{
-            margin: "9px",
-            padding: "20px",
-            border: "1px solid #ccc",
-            borderRadius: "8px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          <Row>
-            <Col>
-              <label>First Name</label>
-              <input
-                className="form-control"
-                placeholder="First name"
-                type="text"
-                name="firstname"
-                value={values.firstname}
-                onChange={handleChange}
-              />
-              {errors.firstname && <span style={{ color: "red" }}>{errors.firstname}</span>}
-            </Col>
-            <Col>
-              <label>Last Name</label>
-              <input
-                className="form-control"
-                placeholder="Last name"
-                type="text"
-                name="lastname"
-                value={values.lastname}
-                onChange={handleChange}
-              />
-              {errors.lastname && <span style={{ color: "red" }}>{errors.lastname}</span>}
-            </Col>
-            <Col>
-              <label style={{ display: "flex" }}>Gender</label>
-              <input
-                type="radio"
-                name="gender"
-                value="Male"
-                id="male"
-                checked={values.gender === "Male"}
-                onChange={handleChange}
-              />
-              <label style={{ width: "40px", margin: "5px" }} htmlFor="male">
-                Male
-              </label>
-
-              <input
-                type="radio"
-                name="gender"
-                value="Female"
-                id="female"
-                checked={values.gender === "Female"}
-                onChange={handleChange}
-              />
-              <label style={{ margin: "5px" }} htmlFor="female">
-                Female
-              </label>
-              {errors.gender && <span style={{ color: "red",marginLeft:'11px' }}>{errors.gender}</span>}
-            </Col>
-          </Row>
-          <Row style={{ marginTop: "20px" }}>
-            <Col>
-              <label>Email</label>
-              <input
-                type="text"
-                className="form-control"
-                style={{ width: "270px" }}
-                placeholder="Email"
-                name="email"
-                value={values.email}
-                id="email"
-                onChange={handleChange}
-              />
-              {errors.email && <span style={{ color: "red" }}>{errors.email}</span>}
-            </Col>
-            <Col>
-              <label htmlFor="phone">Mobile No.</label>
-              <input
-                className="form-control"
-                placeholder="Mobile"
-                style={{ width: "250px" }}
-                type="tel"
-                name="phone"
-                value={values.phone}
-                onChange={handleChange}
-              />
-              {errors.phone && <span style={{ color: "red" }}>{errors.phone}</span>}
-            </Col>
-          </Row>
-          <hr />
-          <Button 
-            type="submit"
-            style={{
-              padding: "7px",
-              marginRight: "15px",
-              width: "150px",
-              marginTop: "10px",
-            }}
-            size="sm"
-          >
-            + ADD NEW ADULT
-          </Button>
-        </form>
-
-        <div className="booking">
-          <h6 style={{ marginTop: "20px" }}>Passenger Details</h6>
-          <table
-            style={{ marginTop: "10px" }}
-            border={1}
-            width="100%"
-            cellPadding={10}
-          >
-            <tbody>
-              <tr>
-                <th>ID</th>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Gender</th>
-              </tr>
-              {inputarr.map((info, ind) => {
-                return (
-                  <tr key={ind}>
-                    <td>{info.id}</td>
-                    <td>{info.firstname}</td>
-                    <td>{info.lastname}</td>
-                    <td>{info.email}</td>
-                    <td>{info.phone}</td>
-                    <td>{info.gender}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </>
-  );
-};
-
-export default Traveller;
+    return (
+        <Container>
+            <h5 style={{ marginLeft: "160px", padding: "3px" }}>
+                Traveller Details
+            </h5>
+            <p style={{ marginLeft: "160px" }}>Adult(12 yrs+)</p>
+            <form
+                onSubmit={handleSubmit}
+                style={{
+                    margin: 'auto',
+                    width:'800px',
+                    padding: "20px",
+                    border: "1px solid #ccc",
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                }}
+            >
+                <Row>
+                    <Col>
+                        <label>Full Name</label>
+                        <input
+                            className="form-control"
+                            placeholder="Full name"
+                            type="text"
+                            name="name"
+                            value={passenger.name}
+                            onChange={handleChange}
+                        />
+                        {errors.name && (
+                            <span style={{ color: "red" }}>{errors.name}</span>
+                        )}
+                    </Col>
+                    <Col>
+                        <label>Email</label>
+                        <input
+                            className='form-control'
+                            type="email"
+                            name="email"
+                            value={passenger.email}
+                            onChange={handleChange}
+                            placeholder="Enter email"
+                        />
+                        {errors.email && (
+                            <span style={{ color: "red" }}>{errors.email}</span>
+                        )}
+                    </Col>
+                </Row>
+                <Row style={{ marginTop: "20px" }}>
+                    <Col>
+                        <label>Phone Number</label>
+                        <input
+                            className='form-control'
+                            type="tel"
+                            name="phoneNumber"
+                            value={passenger.phoneNumber}
+                            onChange={handleChange}
+                            placeholder="Enter phone number"
+                        />
+                        {errors.phoneNumber && (
+                            <span style={{ color: "red" }}>{errors.phoneNumber}</span>
+                        )}
+                    </Col>
+                    <Col>
+                        <label htmlFor="gender">Gender</label>
+                        <select
+                            className='form-control'
+                            name="gender"
+                            value={passenger.gender}
+                            onChange={handleChange}
+                        >
+                            <option value="">Select gender</option>
+                            <option value="MALE">MALE</option>
+                            <option value="FEMALE">FEMALE</option>
+                        </select>
+                        {errors.gender && (
+                            <span style={{ color: "red" }}>{errors.gender}</span>
+                        )}
+                    </Col>
+                </Row>
+                <hr />
+                <Button
+                    type="submit"
+                    style={{
+                        padding: "7px",
+                        marginRight: "15px",
+                        width: "150px",
+                        marginTop: "6px",
+                    }}
+                    size="sm"
+                >
+                    + ADD NEW ADULT
+                </Button>
+            </form>
+            <Row className="justify-content-md-center mt-5">
+                <Col md="8">
+                    <h3 className="text-center">Added Passengers</h3>
+                    <Table striped bordered hover>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th>Gender</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {addedPassengers.length > 0 ? (
+                                addedPassengers.map((p, index) => (
+                                    <tr key={index}>
+                                        <td>{p.name}</td>
+                                        <td>{p.email}</td>
+                                        <td>{p.phoneNumber}</td>
+                                        <td>{p.gender}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="4" className="text-center">No passengers added yet.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </Table>
+                </Col>
+            </Row>
+        </Container>
+    );
+}
