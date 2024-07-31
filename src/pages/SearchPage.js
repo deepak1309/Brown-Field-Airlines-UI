@@ -15,12 +15,10 @@ import {
   Paper,
 } from "@mui/material";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SearchService from "../Service/SearchService";
-import ResultsPage from "./ResultsPage";
 import "../asserts/css/SearchPage.css";
 import { FlightContext } from "./Context/FlightContextProvide";
-
 
 const airports = [
   {
@@ -90,18 +88,14 @@ const airports = [
 ];
 
 const SearchPage = () => {
-  // const {id}=useParams()/
   const { setFlightResults } = useContext(FlightContext);
   const [tripType, setTripType] = useState("oneWay");
-  const {setFlight} = useContext(FlightContext);
   const [from, setFrom] = useState("");
-  const [id, setid] = useState("");
   const [to, setTo] = useState("");
   const [departureDate, setDepartureDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
   const [fareClass, setFareClass] = useState("");
   const [travelers, setTravelers] = useState("1");
-  const [flightData, setFlightData] = useState([]);
   const navigate = useNavigate();
 
   const handleTripTypeChange = (event) => {
@@ -134,26 +128,17 @@ const SearchPage = () => {
 
       console.log("Search Results:", data);
       setFlightResults(data);
-      // setFlight(data)
-      if(tripType==="oneWay")
-        {
-          navigate("/results", { state: { searchResults: data } });
-        }else{
-          navigate("/results1", { state: { searchResults: data } });
-        }
+      navigate(tripType === "oneWay" ? "/results" : "/results1", { state: { searchResults: data } });
     } catch (error) {
       console.error("There was a problem with the search operation:", error);
     }
   };
 
   return (
-    <>
     <Container component="main">
       <CssBaseline />
       <Paper elevation={3} className="paper">
-        <Typography variant="h4" component="h1" className="header" gutterBottom>
-          Brownfield Airline
-        </Typography>
+       
         <Box component="form" noValidate>
           <FormControl component="fieldset" fullWidth margin="normal">
             <RadioGroup
@@ -271,52 +256,6 @@ const SearchPage = () => {
             </Grid>
           </Grid>
 
-          <FormControl component="fieldset" fullWidth margin="normal">
-            <RadioGroup
-              aria-label="fareClass"
-              name="fareClass"
-              value={fareClass}
-              onChange={(e) => setFareClass(e.target.value)}
-            >
-              <Box className="fare-option">
-                <FormControlLabel
-                  value="ECONOMY"
-                  control={<Radio />}
-                  label="Economy"
-                />
-                <Typography className="discount">(Cheapest fares)</Typography>
-              </Box>
-              <Box className="fare-option">
-                <FormControlLabel
-                  value="BUSINESS"
-                  control={<Radio />}
-                  label="Business"
-                />
-                <Typography className="discount">
-                  (More comfort and services)
-                </Typography>
-              </Box>
-              <Box className="fare-option">
-                <FormControlLabel
-                  value="regular"
-                  control={<Radio />}
-                  label="Regular"
-                />
-                <Typography className="discount">(Regular fares)</Typography>
-              </Box>
-              <Box className="fare-option">
-                <FormControlLabel
-                  value="student"
-                  control={<Radio />}
-                  label="Student"
-                />
-                <Typography className="discount">
-                  (Special fares for students)
-                </Typography>
-              </Box>
-            </RadioGroup>
-          </FormControl>
-
           <Button
             variant="contained"
             color="primary"
@@ -329,7 +268,6 @@ const SearchPage = () => {
         </Box>
       </Paper>
     </Container>
-    </>
   );
 };
 

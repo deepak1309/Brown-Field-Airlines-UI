@@ -72,7 +72,7 @@ export default function AddPassenger() {
                         <label>Name</label>
                         <input
                             className="form-control"
-                            placeholder="Name"
+                            placeholder="First name"
                             type="text"
                             name="name"
                             value={passenger.name}
@@ -155,7 +155,7 @@ export default function AddPassenger() {
                 >
                     <tbody>
                         <tr>
-                            {/* <th>ID</th> */}
+                            <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
@@ -164,7 +164,7 @@ export default function AddPassenger() {
                         {addedPassengers.map((info, ind) => {
                             return (
                                 <tr key={ind}>
-                                    {/* <td>{ind + 1}</td> */}
+                                    
                                     <td>{info.name}</td>
                                     <td>{info.email}</td>
                                     <td>{info.phoneNumber}</td>

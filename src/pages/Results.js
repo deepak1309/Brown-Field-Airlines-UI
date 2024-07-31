@@ -7,7 +7,6 @@ import axios from "axios";
 
 const Results = () => {
   const { flightResults, setFlightResults,setSelectedFlight } = useContext(FlightContext);
-  // const [selectedFlight, setSelectedFlight] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);

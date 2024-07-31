@@ -7,7 +7,6 @@ import axios from "axios";
 
 const ResultsPage = () => {
   const { flightResults, setFlightResults,setSelectedFlight } = useContext(FlightContext);
-  // const [selectedFlight, setSelectedFlight] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
@@ -49,45 +48,8 @@ const ResultsPage = () => {
       alert("Failed to fetch flight details");
     }
   };
-
-  const handleViewPrice = async (flightNumber) => {
-    try {
-      const flight = flightResults.returnFlights.find(flight => flight.flightNumber === flightNumber);
-      console.log(flight)
-      if (flight) {
-        localStorage.setItem(`flight_${flightNumber}`, JSON.stringify(flight));
-        setSelectedFlight(flight );
-        navigate(`/flight/${flightNumber}`);
-      }
-    } catch (error) {
-      console.error('Error fetching flight details:', error);
-      alert("Failed to fetch flight details");
-    }
-  };
-
-  const handleViewPricess = async (flightNumber, flightType) => {
-    try {
-      if (!flightResults || !flightResults[flightType]) {
-        throw new Error("Flight results or flight type not available.");
-      }
-
-      const flight = flightResults[flightType].find(flight => flight.flightNumber === flightNumber);
-      
-      if (flight) {
-        localStorage.setItem(`flight_${flightNumber}`, JSON.stringify(flight));
-        setSelectedFlight(flight);
-        navigate(`/flight/${flightNumber}`);
-      } else {
-        alert("Flight not found.");
-      }
-    } catch (error) {
-      console.error('Error fetching flight details:', error);
-      alert("Failed to fetch flight details");
-    }
-  };
   
-  
-  return (
+return (
     <Container component="main">
     <Typography variant="h4" component="h1" gutterBottom>
       Flight Results
@@ -121,7 +83,7 @@ const ResultsPage = () => {
                 variant="outlined"
                 onClick={() => handleViewPrices(flight.flightNumber)}
               >
-                VIEW
+                Add
               </Button>
             </Grid>
             <Grid item xs={12}>

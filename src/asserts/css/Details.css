@@ -80,9 +80,7 @@
     cursor: pointer;
   }
   
-  /* .input-container button:hover {
-    background-color: #0056b3;
-  } */
+ 
   
   .pagination {
     display: flex;
@@ -112,3 +110,7 @@
     margin: 0 10px;
   }
   
+
+  .Book{
+    margin: 100px;
+  }

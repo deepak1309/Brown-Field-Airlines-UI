@@ -2,35 +2,35 @@ import React, { useState } from "react";
 import travel from "../asserts/images/travel.jpg";
 import "../asserts/css/Login.css";
 import { login } from "../Service/Login";
+import { useAuth } from './Context/Auth';
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [Loggin, setLoggin] = useState({
+  const { login: setAuth } = useAuth();
+  const [loginData, setLoginData] = useState({
     loginId: "",
     password: "",
   });
-  const [message, setmessage] = useState(null);
+  const [message, setMessage] = useState(null);
 
-  let handleId = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setLoggin({ ...Loggin, [name]: value });
+    setLoginData({ ...loginData, [name]: value });
   };
 
-  let handlelog = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    login(Loggin)
+    login(loginData)
       .then((res) => {
-        const token = res.data;
-        localStorage.setItem("token", token);
-        console.log(token);
-        setmessage("Logged In Successfully");
-        setLoggin(res.data);
+        const token = res.data; 
+        setAuth(token);
+        setMessage("Logged In Successfully");
         navigate("/searchPage");
       })
       .catch((error) => {
         console.error("Login failed:", error);
-        setmessage("Invalid LoginId or Password.Please try again"); // Set error message for unsuccessful login
+        setMessage("Invalid Login ID or Password. Please try again.");
       });
   };
 
@@ -39,6 +39,7 @@ export default function Login() {
       <div>
         <img
           src={travel}
+          alt="Travel"
           style={{
             width: "660px",
             height: "470px",
@@ -47,38 +48,38 @@ export default function Login() {
           }}
         />
       </div>
-      <div class="login-container">
-        <form>
+      <div className="login-container">
+        <form onSubmit={handleLogin}>
           <input
-            value={Loggin.loginId}
+            value={loginData.loginId}
             type="text"
             placeholder="Username"
             name="loginId"
-            onChange={handleId}
+            onChange={handleInputChange}
             required
           />
           <br />
           <input
-            value={Loggin.password}
-            type="text"
+            value={loginData.password}
+            type="password"
             placeholder="Password"
             name="password"
-            autoComplete="password"
-            onChange={handleId}
+            autoComplete="current-password"
+            onChange={handleInputChange}
             required
           />
           <br />
-          <button type="submit" class="btn btn-primary" onClick={handlelog}>
+          <button type="submit" className="btn btn-primary">
             Login
           </button>
-          <br></br>
+          <br />
           <div className="password">
-            <a class="nav-link" href="/forgot">
+            <a className="nav-link" href="/forgot">
               Forgot Password
             </a>
             <a
-              class="nav-link"
-              style={{ marginLeft: "235px", marginTop: "-7%", color: "black" }}
+              className="nav-link"
+              style={{ marginLeft: "235px", marginTop: "-7%" }}
               href="/register"
             >
               New User

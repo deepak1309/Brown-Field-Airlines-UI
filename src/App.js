@@ -1,6 +1,5 @@
-
 import './App.css';
-import {BrowserRouter as Router, Route, Routes, Switch} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from '../src/pages/Login';
 import Navbar from '../src/pages/Navbar';
 import Register from '../src/pages/Register';
@@ -12,28 +11,32 @@ import ResetPassword from './pages/ResetPassword';
 import Admin from './pages/Admin';
 import { FlightProvider } from './pages/Context/FlightContextProvide';
 import Results from './pages/Results';
-import Details from './pages/Details'
+import Details from './pages/Details';
+import Add from './pages/Add';
+import { AuthProvider } from './pages/Context/Auth';
+
 function App() {
   return (
-    <div className=""  >
-      <FlightProvider>
-       <Navbar/>
-       <Router>
+    <AuthProvider>
+    <FlightProvider>
+      <Router>
+        <Navbar/>
         <Routes>
           <Route path='/' element={<Login/>}/>
           <Route path='/register' element={<Register/>}/>
           <Route path='/forgotPassword' element={<Forgot/>}/>
           <Route path="/searchPage" element={<SearchPage/>} />
-        <Route path="/results" element={<ResultsPage />} />
-        <Route path="/results" element={<Results />} />
-        <Route path="/flight/:flightNumber" element={<FlightCard />} />
-        <Route path="resetPassword/:email" element={<ResetPassword />} />
-        <Route path="/Admin" element={<Admin />} />
-        <Route path="/details" element={<Details/>}/>
+          <Route path="/results" element={<ResultsPage />} />
+          <Route path="/results1" element={<Results />} />
+          <Route path="/flight/:flightNumber" element={<FlightCard />} />
+          <Route path="resetPassword/:email" element={<ResetPassword />} />
+          <Route path="/Admin" element={<Admin />} />
+          <Route path="/details" element={<Details/>}/>
+          <Route path="/add" element={<Add/>}/>
         </Routes>
-       </Router>
-       </FlightProvider>
-    </div>
+      </Router>
+    </FlightProvider>
+    </AuthProvider>
   );
 }
 

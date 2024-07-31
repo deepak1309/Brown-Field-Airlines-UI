@@ -1,74 +1,57 @@
+/* Register.css */
 
-  .body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 88vh;
-  }
-  
-  /* Container for register form */
-  .register-container {
-    background-color: #ffffff;
-    padding: 20px;
-    /* margin-top: -5%; */
-    border-radius: 8px;
-    border: 1px solid ;
-    width: 350px;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
-  }
-  
-  /* Register form styles */
-  .register-form {
-    max-width: 300px;
-    margin: 0 auto;
-  }
-  
-  .register-form h4 {
-    text-align: center;
-    margin-bottom: 23px;
-  }
-  
-  .register-form input[type="text"],
-  .register-form input[type="login"],
-  .register-form input[type="email"],
-  .register-form input[type="address"],
-  .register-form input[type="password"] {
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-  }
-  
-  .register-form button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    background-color: #4CAF50;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .register-form button:hover {
-    background-color: #45a049;
-  }
-  
-  .register-form button:focus {
-    outline: none;
-  }
-  
-  .register-form input[type="text"]:focus,
-  .register-form input[type="login"]:focus,
-  .register-form input[type="address"]:focus,
-  .register-form input[type="email"]:focus,
-  .register-form input[type="password"]:focus {
-    border-color: #4CAF50;
-    outline: none;
-    box-shadow: 0px 0px 5px rgba(76, 175, 80, 0.5);
-  }
-  
+.register-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.register-form input {
+  width: calc(100% - 16px);
+  margin: 8px 0;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.register-form button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-form button:hover {
+  background-color: #0056b3;
+}
+
+.message {
+  color: #d9534f;
+  margin-top: 10px;
+}
+
+.logout-button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #dc3545;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.logout-button:hover {
+  background-color: #c82333;
+}
