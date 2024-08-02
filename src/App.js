@@ -15,8 +15,8 @@ import Details from './pages/Details';
 import Add from './pages/Add';
 import { AuthProvider } from './pages/Context/Auth';
 import Booking from './pages/Booking';
-import Bookinddetails from './pages/Bookingdetails';
-import BookingDetails from './pages/Bookingdetails';
+import Bookinddetails from './pages/Bookinddetails';
+import BookingDetails from './pages/Bookinddetails';
 
 function App() {
   return (

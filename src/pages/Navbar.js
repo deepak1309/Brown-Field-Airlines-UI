@@ -1,5 +1,6 @@
+
 import React, { useState } from "react";
-import { useAuth } from "./Context/Auth"; // Adjust import path as needed
+import { useAuth } from "./Context/Auth";
 import { Avatar, Menu, MenuItem, IconButton, Typography } from '@mui/material';
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -23,6 +24,10 @@ export default function Navbar() {
     navigate("/");
   };
 
+  const handleAdmin=()=>{
+    navigate("/Admin")
+  }
+
   const getInitials = (name) => {
     if (!name) return 'U';
     const parts = name.split(' ');
@@ -31,7 +36,7 @@ export default function Navbar() {
       : `${parts[0][0]}`;
   };
 
-  const showIconOnPages = ['/searchPage', "/results", "/results1", "/flight/:flightNumber", "/Book","/Admin"].includes(location.pathname);
+  const showIconOnPages = ['/searchPage', "/results", "/results1", "/flight/:flightNumber", "/Book", "/Admin"].includes(location.pathname);
 
   return (
     <div className='nav'>
@@ -70,8 +75,8 @@ export default function Navbar() {
                       <MenuItem disabled>
                         {/* <Typography variant="body2">{user?.email || 'No email'}</Typography> */}
                       </MenuItem>
-                      {user?.role?.includes('ADMIN') && (
-                        <MenuItem onClick={() => navigate('/Admin')}>
+                      {user?.includes('ADMIN') && (
+                        <MenuItem onClick={handleAdmin}>
                           <Typography variant="body2">Admin Dashboard</Typography>
                         </MenuItem>
                       )}

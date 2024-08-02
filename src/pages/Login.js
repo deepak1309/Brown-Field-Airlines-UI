@@ -3,34 +3,36 @@ import travel from "../asserts/images/travel.jpg";
 import "../asserts/css/Login.css";
 import { login } from "../Service/Login";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./Context/Auth"; // Import useAuth to access the login function
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login: authLogin } = useAuth(); // Access the login function from AuthContext
   const [Loggin, setLoggin] = useState({
     loginId: "",
     password: "",
   });
-  const [message, setmessage] = useState(null);
+  const [message, setMessage] = useState(null);
 
-  let handleId = (e) => {
+  const handleId = (e) => {
     const { name, value } = e.target;
     setLoggin({ ...Loggin, [name]: value });
   };
 
-  let handlelog = (e) => {
+  const handlelog = (e) => {
     e.preventDefault();
     login(Loggin)
       .then((res) => {
-        const { token, role, name, email } = res.data;
-        const userData = { role, name, email }; // Include name and email
+        const { token, role } = res.data;
         localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(userData)); // Save user data
-        setmessage("Logged In Successfully");
+        localStorage.setItem("user", role); 
+        authLogin(token,  role );
+        setMessage("Logged In Successfully");
         navigate("/searchPage");
       })
       .catch((error) => {
         console.error("Login failed:", error);
-        setmessage("Invalid LoginId or Password. Please try again"); // Set error message for unsuccessful login
+        setMessage("Invalid LoginId or Password. Please try again"); 
       });
   };
 
