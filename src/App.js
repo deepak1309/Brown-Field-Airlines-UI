@@ -15,7 +15,8 @@ import Details from './pages/Details';
 import Add from './pages/Add';
 import { AuthProvider } from './pages/Context/Auth';
 import Booking from './pages/Booking';
-import Bookinddetails from './pages/Bookinddetails';
+import Bookinddetails from './pages/Bookingdetails';
+import BookingDetails from './pages/Bookingdetails';
 
 function App() {
   return (
@@ -36,7 +37,7 @@ function App() {
           <Route path="/details" element={<Details/>}/>
           <Route path="/add" element={<Add/>}/>
           {/* <Route path="/book" element={<Booking/>}/> */}
-          <Route path="/Book" element={<Bookinddetails/>}/>
+          <Route path="/Book" element={<BookingDetails/>}/>
         </Routes>
       </Router>
     </FlightProvider>
