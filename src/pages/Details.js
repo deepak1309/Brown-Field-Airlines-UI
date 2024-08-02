@@ -21,7 +21,7 @@ export default function AddPassenger() {
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault(); // Prevent default form submission behavior
+        e.preventDefault();
         const token = localStorage.getItem('token');
         if (!token) {
             console.error('No authentication token found.');

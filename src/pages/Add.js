@@ -3,23 +3,21 @@ import { FlightContext } from "./Context/FlightContextProvide";
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, Typography, Grid, Button, Divider } from '@mui/material';
 import "../asserts/css/Details.css";
-import axios from 'axios'; // Import axios for making API requests
+import axios from 'axios'; 
 
 export default function Add() {
   const { addedPassengers } = useContext(FlightContext);
   const navigate = useNavigate();
-  const [error, setError] = useState(null); // State to handle errors
+  const [error, setError] = useState(null); 
 
   const handleAddAgain = () => {
-    navigate("/flight/:flightNumber"); // Adjust the route as needed
+    navigate("/flight/:flightNumber"); 
   };
 
   const handleBook = async () => {
     try {
-      // Send a POST request to add passengers
       await axios.post('/api/addPassengerList', { passengers: addedPassengers });
-      // On success, navigate to a confirmation page or display a success message
-      navigate('/confirmation'); // Adjust the route as needed
+      navigate('/confirmation');
     } catch (error) {
       console.error('Error adding passenger list:', error);
       setError('Failed to add passengers. Please try again later.'); // Set an error message

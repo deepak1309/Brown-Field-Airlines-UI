@@ -8,7 +8,7 @@ export const FlightProvider = ({ children }) => {
   const [flightResults, setFlightResults] = useState([]);
   const [SelectedFlight, setSelectedFlight] = useState(null);
   const [addedPassengers, setAddedPassengers] = useState([]);
-  // const [user, setUser] = useState(null)
+  const [bookingDetails, setBooking] = useState(null)
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
 
   const login = (token) => {
@@ -24,7 +24,7 @@ export const FlightProvider = ({ children }) => {
   
 
   return (
-    <FlightContext.Provider value={{ flightResults, setFlightResults,SelectedFlight,setSelectedFlight,isAuthenticated, login, logout ,addedPassengers, setAddedPassengers }}>
+    <FlightContext.Provider value={{ flightResults, setFlightResults,SelectedFlight,setSelectedFlight,isAuthenticated, login, logout ,addedPassengers, setAddedPassengers,bookingDetails, setBooking }}>
      {children}
     </FlightContext.Provider>
   );
