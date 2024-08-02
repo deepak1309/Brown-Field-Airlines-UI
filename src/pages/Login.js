@@ -21,17 +21,16 @@ export default function Login() {
     e.preventDefault();
     login(Loggin)
       .then((res) => {
-        const {token,role} = res.data;
-        localStorage.setItem("token", token,role);
-        localStorage.setItem("role", JSON.stringify(role));
-        console.log(token);
+        const { token, role, name, email } = res.data;
+        const userData = { role, name, email }; // Include name and email
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(userData)); // Save user data
         setmessage("Logged In Successfully");
-        setLoggin(res.data);
         navigate("/searchPage");
       })
       .catch((error) => {
         console.error("Login failed:", error);
-        setmessage("Invalid LoginId or Password.Please try again"); // Set error message for unsuccessful login
+        setmessage("Invalid LoginId or Password. Please try again"); // Set error message for unsuccessful login
       });
   };
 
@@ -48,7 +47,7 @@ export default function Login() {
           }}
         />
       </div>
-      <div class="login-container">
+      <div className="login-container">
         <form>
           <input
             value={Loggin.loginId}
@@ -69,16 +68,16 @@ export default function Login() {
             required
           />
           <br />
-          <button type="submit" class="btn btn-primary" onClick={handlelog}>
+          <button type="submit" className="btn btn-primary" onClick={handlelog}>
             Login
           </button>
-          <br></br>
+          <br />
           <div className="password">
-            <a class="nav-link" href="/forgot">
+            <a className="nav-link" href="/forgot">
               Forgot Password
             </a>
             <a
-              class="nav-link"
+              className="nav-link"
               style={{ marginLeft: "235px", marginTop: "-7%" }}
               href="/register"
             >

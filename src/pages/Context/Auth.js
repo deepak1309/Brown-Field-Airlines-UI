@@ -1,17 +1,24 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('user');
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // On app load, check localStorage
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
+    if (token && userData) {
+      setIsAuthenticated(true);
+      setUser(JSON.parse(userData));
+    }
+  }, []);
 
   const login = (token, userData) => {
     localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(userData)); // Save user data to localStorage
+    localStorage.setItem('user', JSON.stringify(userData));
     setIsAuthenticated(true);
     setUser(userData);
   };

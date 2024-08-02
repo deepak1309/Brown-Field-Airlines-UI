@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { useAuth } from './Context/Auth';
+import React, { useState } from "react";
+import { useAuth } from "./Context/Auth"; // Adjust import path as needed
 import { Avatar, Menu, MenuItem, IconButton, Typography } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
-  const nav=useNavigate()
+  const navigate = useNavigate();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -20,7 +20,7 @@ export default function Navbar() {
   const handleLogout = () => {
     handleClose();
     logout();
-    nav("/")
+    navigate("/");
   };
 
   const getInitials = (name) => {
@@ -31,8 +31,7 @@ export default function Navbar() {
       : `${parts[0][0]}`;
   };
 
-
-  const showIconOnPages = ['/searchPage',"/results","/results1","/flight/:flightNumber","/Book"].includes(location.pathname);
+  const showIconOnPages = ['/searchPage', "/results", "/results1", "/flight/:flightNumber", "/Book","/Admin"].includes(location.pathname);
 
   return (
     <div className='nav'>
@@ -62,25 +61,22 @@ export default function Navbar() {
               {isAuthenticated && showIconOnPages ? (
                 <li className="nav-item" style={{ margin: "2px" }}>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <IconButton
-                      onClick={handleClick}
-                      edge="end"
-                      color="success"
-                    >
+                    <IconButton onClick={handleClick} edge="end" color="success">
                       <Avatar sx={{ bgcolor: '#1976d2', width: 36, height: 36 }}>
                         {user ? getInitials(user.name) : 'U'}
                       </Avatar>
                     </IconButton>
-                    <Menu
-                      anchorEl={anchorEl}
-                      open={Boolean(anchorEl)}
-                      onClose={handleClose}
-                    >
+                    <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
                       <MenuItem disabled>
                         {/* <Typography variant="body2">{user?.email || 'No email'}</Typography> */}
                       </MenuItem>
+                      {user?.role?.includes('ADMIN') && (
+                        <MenuItem onClick={() => navigate('/Admin')}>
+                          <Typography variant="body2">Admin Dashboard</Typography>
+                        </MenuItem>
+                      )}
                       <MenuItem onClick={handleLogout}>
-                       <a href=''> <Typography variant="body2">Logout</Typography></a>
+                        <Typography variant="body2">Logout</Typography>
                       </MenuItem>
                     </Menu>
                   </div>
