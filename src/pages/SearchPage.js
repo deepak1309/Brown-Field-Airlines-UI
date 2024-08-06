@@ -252,6 +252,7 @@ const SearchPage = () => {
               >
                 <MenuItem value="ECONOMY">Economy</MenuItem>
                 <MenuItem value="BUSINESS">Business</MenuItem>
+                <MenuItem value=" PREMIUM_ECONOMY">Premium Economy</MenuItem>
               </TextField>
             </Grid>
           </Grid>

@@ -5,8 +5,6 @@ import { useParams } from 'react-router-dom';
 
 const AdminDetails = () => {
   const { id } = useParams();
-
-
   const [aircraftDetails, setAircraftDetails] = useState({
     name: '',
     model: '',
@@ -14,9 +12,9 @@ const AdminDetails = () => {
   });
   const [aircraft, setAircraft] = useState([]);
   const [currentPageAircraft, setCurrentPageAircraft] = useState(1);
-  const [itemsPerPageAircraft, setItemsPerPageAircraft] = useState(5);
-
- 
+  const [itemsPerPageAircraft] = useState(5);
+  const [showAircraftTable, setShowAircraftTable] = useState(false);
+  const [showFlightTable, setShowFilghtTable] = useState(false);
   const [flightDetails, setFlightDetails] = useState({
     id: '',
     flightNumber: '',
@@ -28,64 +26,69 @@ const AdminDetails = () => {
   });
   const [flights, setFlights] = useState([]);
   const [currentPageFlights, setCurrentPageFlights] = useState(1);
-  const [itemsPerPageFlights, setItemsPerPageFlights] = useState(5);
+  const [itemsPerPageFlights] = useState(5);
 
- 
   const [fareDetails, setFareDetails] = useState({
     flight: { id: 0 },
     fareClass: '',
     price: 0
   });
   const [currentPageFare, setCurrentPageFare] = useState(1);
-  const [itemsPerPageFare, setItemsPerPageFare] = useState(5);
+  const [itemsPerPageFare] = useState(5);
 
-  // Handlers
+
   const handleAddAircraft = (e) => {
     const { name, value } = e.target;
-    setAircraftDetails({ ...aircraftDetails, [name]: value });
+    setAircraftDetails((prev) => ({ ...prev, [name]: value }));
   };
 
+ 
   const handleAircraft = (e) => {
     e.preventDefault();
     axios.post("http://localhost:8080/api/aircraft", aircraftDetails)
       .then((res) => {
-        console.log(res.data);
         setAircraft((prev) => [res.data, ...prev]);
         setAircraftDetails({ name: '', model: '', capacity: '' });
-        alert("added")
+        alert("Aircraft added successfully");
       })
       .catch((error) => {
-        console.error("Error adding aircraft:", error.response ? error.response.data : error.message);
-        alert(error.response ? error.response.data : "An error occurred while adding the aircraft.");
+        console.error("Error adding aircraft:", error.response?.data || error.message);
+        alert(error.response?.data || "An error occurred while adding the aircraft.");
       });
   };
-  
 
-  const deleteair = (id) => {
+
+  const deleteAircraft = (id) => {
     axios.delete(`http://localhost:8080/api/aircraft/${id}`)
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
         setAircraft((prev) => prev.filter((item) => item.id !== id));
+      })
+      .catch((error) => {
+        console.error("Error deleting aircraft:", error.response?.data || error.message);
       });
   };
+
 
   const handleAddFlight = (e) => {
     const { name, value } = e.target;
-    setFlightDetails({ ...flightDetails, [name]: value });
+    setFlightDetails((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handlegetFlight = () => {
+
+  const handleGetFlight = () => {
     axios.get(`http://localhost:8080/flights/getBy/${flightDetails.flightNumber}`)
       .then((res) => {
-        console.log(res.data);
         setFlightDetails(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching flight details:", error.response?.data || error.message);
       });
   };
 
-  const handleFlight = () => {
+    const handleFlight = (e) => {
+    e.preventDefault();
     axios.post("http://localhost:8080/flights", flightDetails)
       .then((res) => {
-        console.log(res.data);
         setFlights((prev) => [res.data, ...prev]);
         setFlightDetails({
           id: '',
@@ -96,52 +99,60 @@ const AdminDetails = () => {
           destination: '',
           aircraft: { id: 0 }
         });
-        alert("added")
+        alert("Flight added successfully");
       })
       .catch((error) => {
-        console.error("Error adding flight:", error.response ? error.response.data : error.message);
-        alert(error.response ? error.response.data : "An error occurred while adding the flight.");
+        console.error("Error adding flight:", error.response?.data || error.message);
+        alert(error.response?.data || "An error occurred while adding the flight.");
       });
   };
-  
 
   const handleAddFare = (e) => {
     const { name, value } = e.target;
-    setFareDetails({ ...fareDetails, [name]: value });
+    setFareDetails((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFare = () => {
+ 
+  const handleFare = (e) => {
+    e.preventDefault();
     axios.post("http://localhost:8080/api/fares/add", fareDetails)
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
         setFareDetails({
           flight: { id: 0 },
           fareClass: '',
           price: 0
-        })
-        alert("added")
-      }) .catch((error) => {
-        console.error("Error adding flight:", error.response ? error.response.data : error.message);
-        alert(error.response ? error.response.data : "An error occurred while adding the flight.");
+        });
+        alert("Fare added successfully");
+      })
+      .catch((error) => {
+        console.error("Error adding fare:", error.response?.data || error.message);
+        alert(error.response?.data || "An error occurred while adding the fare.");
       });
   };
 
- 
-  useEffect(() => {
-    axios.get("http://localhost:8080/api/aircraft")
-      .then((res) => {
-        console.log(res.data);
-        setAircraft(res.data);
-      });
-  }, []);
 
-  useEffect(() => {
+  const flightget=()=>{
     axios.get("http://localhost:8080/flights")
       .then((res) => {
-        console.log(res.data);
         setFlights(res.data);
+        setShowFilghtTable((prev) => !prev)
+      })
+      .catch((error) => {
+        console.error("Error fetching flights:", error.response?.data || error.message);
       });
-  }, []);
+  }
+
+  const aircraftGet = () => {
+    axios.get("http://localhost:8080/api/aircraft")
+      .then((res) => {
+        setAircraft(res.data);
+        setShowAircraftTable((prev) => !prev);
+      })
+      .catch((error) => {
+        console.error("Error fetching aircraft:", error.response?.data || error.message);
+      });
+  };
+
 
   const paginate = (data, currentPage, itemsPerPage) => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -171,42 +182,7 @@ const AdminDetails = () => {
     <div className="admin-details-container">
       <h2>ADMIN</h2>
 
-      <h3>Aircraft details</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Flight Name</th>
-            <th>Flight Model</th>
-            <th>Capacity</th>
-            {/* <th>Actions</th> */}
-          </tr>
-        </thead>
-        <tbody>
-          {paginatedAircraft.map((detail) => (
-            <tr key={detail.id}>
-              <td>{detail.name}</td>
-              <td>{detail.model}</td>
-              <td>{detail.capacity}</td>
-              {/* <td><button onClick={() => deleteair(detail.id)}>Delete</button></td> */}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="pagination">
-        <button
-          onClick={() => handlePageChange(currentPageAircraft - 1, 'aircraft')}
-          disabled={currentPageAircraft === 1}
-        >
-          Previous
-        </button>
-        <span>Page {currentPageAircraft}</span>
-        <button
-          onClick={() => handlePageChange(currentPageAircraft + 1, 'aircraft')}
-          disabled={paginatedAircraft.length < itemsPerPageAircraft}
-        >
-          Next
-        </button>
-      </div>
+      <h3>Aircraft Details</h3>
       <div className="input-container">
         <input
           type="text"
@@ -231,6 +207,50 @@ const AdminDetails = () => {
         />
         <button onClick={handleAircraft}>Add Aircraft</button>
       </div>
+      <button onClick={aircraftGet} type="button" class="btn btn-success">
+        {showAircraftTable ? 'Hide Aircraft Table' : 'Show Aircraft Table'}
+      </button>
+      {showAircraftTable && (
+        <>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Model</th>
+                <th>Capacity</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedAircraft.map((detail) => (
+                <tr key={detail.id}>
+                  <td>{detail.id}</td>
+                  <td>{detail.name}</td>
+                  <td>{detail.model}</td>
+                  <td>{detail.capacity}</td>
+                  <td><button className="delete" onClick={() => deleteAircraft(detail.id)}>Delete</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="pagination">
+            <button
+              onClick={() => handlePageChange(currentPageAircraft - 1, 'aircraft')}
+              disabled={currentPageAircraft === 1}
+            >
+              Previous
+            </button>
+            <span>Page {currentPageAircraft}</span>
+            <button
+              onClick={() => handlePageChange(currentPageAircraft + 1, 'aircraft')}
+              disabled={paginatedAircraft.length < itemsPerPageAircraft}
+            >
+              Next
+            </button>
+          </div>
+        </>
+      )}
 
       <h3>Flight Details</h3>
       <input
@@ -240,44 +260,8 @@ const AdminDetails = () => {
         value={flightDetails.flightNumber}
         onChange={handleAddFlight}
       />
-      <button onClick={handlegetFlight}>GET</button>
-      <table>
-        <thead>
-          <tr>
-            <th>Flight Number</th>
-            <th>Departure Time</th>
-            <th>Arrival Time</th>
-            <th>Source</th>
-            <th>Destination</th>
-          </tr>
-        </thead>
-        <tbody>
-          {paginatedFlights.map((flight) => (
-            <tr key={flight.id}>
-              <td>{flight.flightNumber}</td>
-              <td>{flight.departureTime}</td>
-              <td>{flight.arrivalTime}</td>
-              <td>{flight.source}</td>
-              <td>{flight.destination}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="pagination">
-        <button
-          onClick={() => handlePageChange(currentPageFlights - 1, 'flights')}
-          disabled={currentPageFlights === 1}
-        >
-          Previous
-        </button>
-        <span>Page {currentPageFlights}</span>
-        <button
-          onClick={() => handlePageChange(currentPageFlights + 1, 'flights')}
-          disabled={paginatedFlights.length < itemsPerPageFlights}
-        >
-          Next
-        </button>
-      </div>
+      <button onClick={handleGetFlight}>GET</button>
+     
       <div className="input-container">
         <input
           type="text"
@@ -315,56 +299,72 @@ const AdminDetails = () => {
           onChange={handleAddFlight}
         />
         <input
-          type="text"
+          type="number"
           placeholder="Aircraft ID"
-          name="id"
+          name="aircraft.id"
           value={flightDetails.aircraft.id}
-          onChange={(e) => setFlightDetails({
-            ...flightDetails,
-            aircraft: { id: e.target.value }
-          })}
+          onChange={handleAddFlight}
         />
         <button onClick={handleFlight}>Add Flight</button>
       </div>
 
-      <h3>Fare Details</h3>
+      <button onClick={flightget}>Flight</button>
       <table>
         <thead>
           <tr>
-            <th>Flight ID</th>
-            <th>Class</th>
-            <th>Price</th>
+            <th>ID</th>
+            <th>Flight Number</th>
+            <th>Departure Time</th>
+            <th>Arrival Time</th>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Aircraft ID</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-
+          {paginatedFlights.map((flight) => (
+            <tr key={flight.id}>
+              <td>{flight.id}</td>
+              <td>{flight.flightNumber}</td>
+              <td>{flight.departureTime}</td>
+              <td>{flight.arrivalTime}</td>
+              <td>{flight.source}</td>
+              <td>{flight.destination}</td>
+              <td>{flight.aircraft.id}</td>
+              <td><button className="delete">Delete</button></td>
+            </tr>
+          ))}
         </tbody>
       </table>
-      {/* <div className="pagination">
+      <div className="pagination">
         <button
-          onClick={() => handlePageChange(currentPageFare - 1, 'fare')}
-          disabled={currentPageFare === 1}
+          onClick={() => handlePageChange(currentPageFlights - 1, 'flights')}
+          disabled={currentPageFlights === 1}
         >
           Previous
         </button>
-        <span>Page {currentPageFare}</span>
+        <span>Page {currentPageFlights}</span>
         <button
-          onClick={() => handlePageChange(currentPageFare + 1, 'fare')}
+          onClick={() => handlePageChange(currentPageFlights + 1, 'flights')}
+          disabled={paginatedFlights.length < itemsPerPageFlights}
         >
           Next
         </button>
-      </div> */}
+      </div>
+
+      <h3>Fare Details</h3>
       <div className="input-container">
         <input
           type="text"
           placeholder="Flight ID"
-          name="flight"
+          name="flight.id"
           value={fareDetails.flight.id}
-          onChange={(e) => setFareDetails({ ...fareDetails, flight: { id: e.target.value } })}
+          onChange={handleAddFare}
         />
         <input
           type="text"
-          placeholder="Class"
+          placeholder="Fare Class"
           name="fareClass"
           value={fareDetails.fareClass}
           onChange={handleAddFare}

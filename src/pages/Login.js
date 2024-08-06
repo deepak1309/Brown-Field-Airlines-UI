@@ -27,8 +27,15 @@ export default function Login() {
         localStorage.setItem("token", token);
         localStorage.setItem("user", role); 
         authLogin(token,  role );
-        setMessage("Logged In Successfully");
+        if(role=="ADMIN")
+        {
+          setMessage("Logged In Successfully");
+        navigate("/Admin");
+        }else{
+          setMessage("Logged In Successfully");
         navigate("/searchPage");
+        }
+        
       })
       .catch((error) => {
         console.error("Login failed:", error);

@@ -15,8 +15,9 @@ import Details from './pages/Details';
 import Add from './pages/Add';
 import { AuthProvider } from './pages/Context/Auth';
 import Booking from './pages/Booking';
-import Bookinddetails from './pages/Bookinddetails';
-import BookingDetails from './pages/Bookinddetails';
+import Bookinddetails from './pages/Bookingdetails';
+import BookingDetails from './pages/Bookingdetails';
+import Payment from './pages/Payment';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="/add" element={<Add/>}/>
           {/* <Route path="/book" element={<Booking/>}/> */}
           <Route path="/Book" element={<BookingDetails/>}/>
+          <Route path="/pay" element={<Payment/>}/>
         </Routes>
       </Router>
     </FlightProvider>

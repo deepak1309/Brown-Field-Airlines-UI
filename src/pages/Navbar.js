@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useAuth } from "./Context/Auth";
 import { Avatar, Menu, MenuItem, IconButton, Typography } from '@mui/material';
@@ -24,19 +23,24 @@ export default function Navbar() {
     navigate("/");
   };
 
-  const handleAdmin=()=>{
-    navigate("/Admin")
-  }
+  const handleAdmin = () => {
+    navigate("/Admin");
+  };
 
   const getInitials = (name) => {
-    if (!name) return 'U';
+    if (!name) return "U";
     const parts = name.split(' ');
     return parts.length > 1
       ? `${parts[0][0]}${parts[1][0]}`
       : `${parts[0][0]}`;
   };
 
-  const showIconOnPages = ['/searchPage', "/results", "/results1", "/flight/:flightNumber", "/Book", "/Admin"].includes(location.pathname);
+  const isDynamicRoute = (path) => {
+    const regex = /^\/flight\/.+$/; 
+    return regex.test(path);
+  };
+
+  const showIconOnPages = ['/searchPage', "/results", "/results1", "/Book", "/Admin", "/pay"].includes(location.pathname) || isDynamicRoute(location.pathname);
 
   return (
     <div className='nav'>
@@ -54,39 +58,57 @@ export default function Navbar() {
               <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" style={{ width: "280px" }} />
             </form>
             <ul className="navbar-nav me-auto mb-2 mb-lg-0" style={{ fontSize: "20px", margin: "9px", padding: "6px" }}>
-              <li className="nav-item" style={{ marginLeft: "210px" }}>
-                <a className="nav-link active" aria-current="page" href='/searchPage'>Home</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link">About</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link">Flight</a>
-              </li>
               {isAuthenticated && showIconOnPages ? (
-                <li className="nav-item" style={{ margin: "2px" }}>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <IconButton onClick={handleClick} edge="end" color="success">
-                      <Avatar sx={{ bgcolor: '#1976d2', width: 36, height: 36 }}>
-                        {user ? getInitials(user.name) : 'U'}
-                      </Avatar>
-                    </IconButton>
-                    <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                      <MenuItem disabled>
-                        {/* <Typography variant="body2">{user?.email || 'No email'}</Typography> */}
-                      </MenuItem>
-                      {user?.includes('ADMIN') && (
-                        <MenuItem onClick={handleAdmin}>
-                          <Typography variant="body2">Admin Dashboard</Typography>
+                <>
+                {user?.includes('ADMIN') ? (
+                           <li className="nav-item" style={{ marginLeft: "210px" }}>
+                           <a className="nav-link active" aria-current="page" href='/Admin'>Home</a>
+                         </li> 
+                        ):(
+                          <li className="nav-item" style={{ marginLeft: "210px" }}>
+                          <a className="nav-link active" aria-current="page" href='/searchPage'>Home</a>
+                        </li>
+                        )}
+
+                  <li className="nav-item">
+                    <a className="nav-link">About</a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link">Flight</a>
+                  </li>
+                  <li className="nav-item" style={{ margin: "2px" }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <IconButton onClick={handleClick} edge="end" color="success">
+                        <Avatar sx={{ bgcolor: '#1976d2', width: 36, height: 36 }}>
+                          {user ? (user.includes('ADMIN') ? 'A' : getInitials(user.name)) : 'U'}
+                        </Avatar>
+                      </IconButton>
+                      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+                        {user?.includes('ADMIN') && (
+                          <MenuItem onClick={handleAdmin}>
+                            <Typography variant="body2">Admin Dashboard</Typography>
+                          </MenuItem>
+                        )}
+                        <MenuItem onClick={handleLogout}>
+                          <Typography variant="body2">Logout</Typography>
                         </MenuItem>
-                      )}
-                      <MenuItem onClick={handleLogout}>
-                        <Typography variant="body2">Logout</Typography>
-                      </MenuItem>
-                    </Menu>
-                  </div>
-                </li>
-              ) : null}
+                      </Menu>
+                    </div>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="nav-item" style={{ marginLeft: "210px" }}>
+                    <a className="nav-link" aria-current="page">Home</a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link">About</a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link">Flight</a>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </div>

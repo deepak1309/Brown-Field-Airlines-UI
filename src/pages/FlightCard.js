@@ -4,13 +4,13 @@ import { FlightContext } from "./Context/FlightContextProvide";
 import "../asserts/css/FlightCard.css";
 import { Row, Col, Button } from 'react-bootstrap';
 import axios from "axios";
-import { Card, CardContent, Typography, Grid, Divider } from '@mui/material';
+import { Card, CardContent, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import "../asserts/css/Details.css";
 
 function FlightCard() {
   const navigate = useNavigate();
-  const { SelectedFlight, setBooking } = useContext(FlightContext);
-  const [addedPassengers, setAddedPassengers] = useState([]);
+  const { SelectedFlight, setBooking,setaddPassengers,addpassengers } = useContext(FlightContext);
+  const [passengers, setPassengers] = useState([]); 
   const [passenger, setPassenger] = useState({
     name: '',
     email: '',
@@ -23,7 +23,7 @@ function FlightCard() {
   });
   const [error, setError] = useState(null);
   const [bookingDetails, setBookingDetails] = useState(null);
-  const [bookingSubmitted, setBookingSubmitted] = useState(false); 
+  const [bookingSubmitted, setBookingSubmitted] = useState(false);
 
   if (!SelectedFlight) {
     return <div>No flight details available</div>;
@@ -37,8 +37,53 @@ function FlightCard() {
     }));
   };
 
-  const handleAddAgain = () => {
-    navigate(`/flight/${SelectedFlight.flightNumber}`);
+  const handleAddPassenger = (e) => {
+    e.preventDefault();
+    if (!passenger.name || !passenger.email || !passenger.phoneNumber || !passenger.gender) {
+      setError('All passenger details are required.');
+      return;
+    }
+
+    setPassengers(prevList => [...prevList, passenger]);
+    setPassenger({
+      name: '',
+      email: '',
+      phoneNumber: '',
+      gender: ''
+    });
+    setError(null); 
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('No authentication token found.');
+      return;
+    }
+
+    try {
+      await axios.post("http://localhost:8080/api/addPassengerList", passengers, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }).then((res)=>{
+        console.log(res.data)
+        setPassengers([]);
+        setPassenger({
+          name: '',
+          email: '',
+          phoneNumber: '',
+          gender: ''
+        });
+        setaddPassengers(res.data)
+        navigate("/Book");
+      })
+
+    } catch (error) {
+      setError('An error occurred while adding the passengers. Please try again later.');
+    }
   };
 
   const handleBook = async (e) => {
@@ -47,69 +92,34 @@ function FlightCard() {
       setError('Flight number and fare class are required.');
       return;
     }
-    
+
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        console.error('No authentication token found.');
         setError('No authentication token found.');
         return;
       }
 
-      const response = await axios.post("http://localhost:8080/api/bookings/create/payment", pay, {
+      
+      const response = await axios.post("http://localhost:8080/api/bookings/create/payment", { ...pay, passengers }, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       });
 
-      console.log('Booking response:', response.data); // Debugging log
       setBooking(response.data);
+      setBookingDetails(response.data);
       setBookingSubmitted(true);
-      navigate("/Book")
-      
+      navigate("/Book");
+
     } catch (error) {
-      console.error('Error booking flight:', error);
       setError('Failed to book the flight. Please try again later.');
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.error('No authentication token found.');
-      setError('No authentication token found.');
-      return;
-    }
-
-    try {
-      const response = await axios.post("http://localhost:8080/api/addPassengerList", [passenger], {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      console.log('Passenger added successfully:', response.data);
-      setAddedPassengers(prevList => [...prevList, passenger]);
-      setPassenger({
-        name: '',
-        email: '',
-        phoneNumber: '',
-        gender: ''
-      });
-      
-    } catch (error) {
-      console.error('Error adding passenger list:', error.response ? error.response.data : error.message);
-      setError(error.response ? error.response.data.error : 'An error occurred while adding the passenger. Please try again later.');
-    }
-  };
-
-
-
   return (
     <div className="flight-card">
-      {/* Flight details rendering */}
       <div className="flight-header">
         <div className="flight-route">
           <span>{SelectedFlight.source}</span>
@@ -153,19 +163,12 @@ function FlightCard() {
         </div>
       </div>
 
-      {/* Passenger form */}
       <div className="main">
-        <h5 style={{ marginLeft: "12px", padding: "3px" }}>Traveller Details</h5>
-        <p style={{ marginLeft: "17px" }}>Adult (12 yrs+)</p>
+        <h5 className="traveller-details-heading">Traveller Details</h5>
+        <p className="traveller-details-subtitle">Adult (12 yrs+)</p>
         <form
-          onSubmit={handleSubmit}
-          style={{
-            margin: "9px",
-            padding: "20px",
-            border: "1px solid #ccc",
-            borderRadius: "8px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-          }}
+          className="passenger-form"
+          onSubmit={handleAddPassenger}
         >
           <Row>
             <Col>
@@ -187,6 +190,7 @@ function FlightCard() {
                 value="MALE"
                 onChange={handleChange}
                 id="MALE"
+                checked={passenger.gender === 'MALE'}
               />
               <label style={{ width: "40px", margin: "5px" }} htmlFor="MALE">MALE</label>
               <input
@@ -195,6 +199,7 @@ function FlightCard() {
                 value="FEMALE"
                 onChange={handleChange}
                 id="FEMALE"
+                checked={passenger.gender === 'FEMALE'}
               />
               <label style={{ margin: "5px" }} htmlFor="FEMALE">FEMALE</label>
             </Col>
@@ -205,7 +210,6 @@ function FlightCard() {
               <input
                 type="email"
                 className="form-control"
-                style={{ width: "270px" }}
                 placeholder="Email"
                 name="email"
                 value={passenger.email}
@@ -217,7 +221,6 @@ function FlightCard() {
               <input
                 className="form-control"
                 placeholder="Mobile"
-                style={{ width: "250px" }}
                 type="tel"
                 name="phoneNumber"
                 value={passenger.phoneNumber}
@@ -228,112 +231,76 @@ function FlightCard() {
           <hr />
           <Button
             type="submit"
-            style={{
-              padding: "7px",
-              marginRight: "15px",
-              width: "150px",
-              marginTop: "10px",
-            }}
+            className="add-passenger-button"
             size="sm"
           >
             + ADD NEW ADULT
           </Button>
           {error && (
-            <p style={{ color: 'red', marginTop: '10px' }}>
+            <p className="error-message">
               {error}
             </p>
           )}
         </form>
       </div>
 
-      {/* Booking Details */}
-      {bookingSubmitted && bookingDetails ? (
-        <div style={{ padding: '20px' }}>
-          <Card style={{ maxWidth: '800px', margin: 'auto' }}>
-            <CardContent>
-              <Typography variant="h6" component="div" style={{ marginBottom: '20px' }}>
-                Booking Details
-              </Typography>
-              <Typography variant="body1" component="div" style={{ marginBottom: '10px' }}>
-                <strong>Booking Reference:</strong> {bookingDetails.reference}
-              </Typography>
-              <Typography variant="body1" component="div" style={{ marginBottom: '10px' }}>
-                <strong>Flight Number:</strong> {bookingDetails.flightNumber}
-              </Typography>
-              <Typography variant="body1" component="div" style={{ marginBottom: '10px' }}>
-                <strong>Fare Class:</strong> {bookingDetails.fareClass}
-              </Typography>
-              <Typography variant="body1" component="div" style={{ marginBottom: '10px' }}>
-                <strong>Price:</strong> {bookingDetails.price}
-              </Typography>
-            </CardContent>
-          </Card>
-        </div>
-      ) : (
-        <div style={{ padding: '20px' }}>
-          <Typography variant="body1" component="div" style={{ color: 'grey' }}>
-            {/* No booking details available. */}
-          </Typography>
-        </div>
-      )}
-
-      {/* Passenger List */}
-      <div style={{ padding: '20px' }}>
-        <Card style={{ maxWidth: '800px', margin: 'auto' }}>
+      <div className="card-container">
+        <Card>
           <CardContent>
-            <Typography variant="h6" component="div" style={{ marginBottom: '20px' }}>
+            <Typography variant="h6" component="div" className="card-title">
               Passenger Details
             </Typography>
-            {addedPassengers.length === 0 ? (
+            {passengers.length === 0 ? (
               <Typography variant="body1" component="div">
                 No passengers added.
               </Typography>
             ) : (
-              addedPassengers.map((info, ind) => (
-                <div key={ind} style={{ marginBottom: '20px' }}>
-                  <Typography variant="h6" component="div" style={{ marginBottom: '10px' }}>
-                    Passenger {ind + 1}
-                  </Typography>
-                  <Divider style={{ marginBottom: '10px' }} />
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
-                      <Typography variant="body1" component="div">
-                        <strong>Name:</strong> {info.name}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Typography variant="body1" component="div">
-                        <strong>Email:</strong> {info.email}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Typography variant="body1" component="div">
-                        <strong>Phone:</strong> {info.phoneNumber}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Typography variant="body1" component="div">
-                        <strong>Gender:</strong> {info.gender}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  <Divider style={{ margin: '20px 0' }} />
-                </div>
-              ))
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell><Typography variant="h6">Passenger</Typography></TableCell>
+                      <TableCell><Typography variant="h6">Name</Typography></TableCell>
+                      <TableCell><Typography variant="h6">Email</Typography></TableCell>
+                      <TableCell><Typography variant="h6">Phone</Typography></TableCell>
+                      <TableCell><Typography variant="h6">Gender</Typography></TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {passengers.map((info, ind) => (
+                      <TableRow key={ind}>
+                        <TableCell><Typography variant="body1">Passenger {ind + 1}</Typography></TableCell>
+                        <TableCell><Typography variant="body1">{info.name}</Typography></TableCell>
+                        <TableCell><Typography variant="body1">{info.email}</Typography></TableCell>
+                        <TableCell><Typography variant="body1">{info.phoneNumber}</Typography></TableCell>
+                        <TableCell><Typography variant="body1">{info.gender}</Typography></TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             )}
-            <div className="book" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
-              <Button variant="contained" color="secondary" onClick={handleBook}>
-                Book
-              </Button>
-            </div>
             {error && (
-              <Typography variant="body1" color="error" style={{ marginTop: '20px' }}>
+              <Typography variant="body1" color="error" className="error-message">
                 {error}
               </Typography>
             )}
           </CardContent>
         </Card>
       </div>
+
+      <Button
+        onClick={handleSubmit}
+        className="book-flight-button"
+      >
+        Add Passengers
+      </Button>
+      {/* <Button
+        onClick={handleBook}
+        className="book-flight-button"
+      >
+        Book Flight
+      </Button> */}
     </div>
   );
 }
