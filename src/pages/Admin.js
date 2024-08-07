@@ -309,7 +309,7 @@ const AdminDetails = () => {
       </div>
 
       <button onClick={flightget} type="button" class="btn btn-success">
-        {showFlightTable ? 'Hide Aircraft Table' : 'Show Aircraft Table'}
+        {showFlightTable ? 'Hide Flight Table' : 'Show Flight Table'}
       </button>
       { showFlightTable && (
       <>
