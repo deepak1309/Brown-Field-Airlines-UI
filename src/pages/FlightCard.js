@@ -70,7 +70,7 @@ function FlightCard() {
         }
       }).then((res)=>{
         console.log(res.data)
-        setPassengers([]);
+        setPassengers([passengers]);
         setPassenger({
           name: '',
           email: '',
