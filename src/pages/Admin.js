@@ -308,7 +308,11 @@ const AdminDetails = () => {
         <button onClick={handleFlight}>Add Flight</button>
       </div>
 
-      <button onClick={flightget}>Flight</button>
+      <button onClick={flightget} type="button" class="btn btn-success">
+        {showFlightTable ? 'Hide Aircraft Table' : 'Show Aircraft Table'}
+      </button>
+      { showFlightTable && (
+      <>
       <table>
         <thead>
           <tr>
@@ -337,6 +341,8 @@ const AdminDetails = () => {
           ))}
         </tbody>
       </table>
+      </>
+      )}
       <div className="pagination">
         <button
           onClick={() => handlePageChange(currentPageFlights - 1, 'flights')}
