@@ -433,66 +433,7 @@ const AdminDetails = () => {
             <button onClick={handleAddFlight} className="btn btn-primary">Add Flight</button>
           </div>
 
-          {flightEdit.id && (
-            <div className="edit-container">
-              <input
-                type="text"
-                placeholder="Flight Number"
-                name="flightNumber"
-                value={flightEdit.flightNumber || ''}
-                onChange={handleChange(setFlightEdit)}
-              />
-              <input
-                type="text"
-                placeholder="Departure Time"
-                name="departureTime"
-                value={flightEdit.departureTime || ''}
-                onChange={handleChange(setFlightEdit)}
-              />
-              <input
-                type="text"
-                placeholder="Arrival Time"
-                name="arrivalTime"
-                value={flightEdit.arrivalTime || ''}
-                onChange={handleChange(setFlightEdit)}
-              />
-              <input
-                type="text"
-                placeholder="Source"
-                name="source"
-                value={flightEdit.source || ''}
-                onChange={handleChange(setFlightEdit)}
-              />
-              <input
-                type="text"
-                placeholder="Destination"
-                name="destination"
-                value={flightEdit.destination || ''}
-                onChange={handleChange(setFlightEdit)}
-              />
-              <select
-                name="aircraft.id"
-                value={flightEdit.aircraft.id || ''}
-                onChange={(e) => setFlightEdit(prev => ({
-                  ...prev,
-                  aircraft: { id: e.target.value }
-                }))}
-              >
-                <option value="">Select Aircraft</option>
-                {aircraft.map(ac => (
-                  <option key={ac.id} value={ac.id}>
-                    {ac.name} ({ac.model})
-                  </option>
-                ))}
-              </select>
-              <button onClick={() => handleFlightEdit(flightEdit.id)} type="button" className="btn btn-primary">
-                Update Flight
-              </button>
-            </div>
-          )}
-        </>
-      )}
-
+      <button onClick={flightget}>Flight</button>
       <table>
         <thead>
           <tr>
@@ -525,13 +466,21 @@ const AdminDetails = () => {
           ))}
         </tbody>
       </table>
-
-      <Pagination
-        currentPage={currentPageFlights}
-        totalItems={flights.length}
-        itemsPerPage={itemsPerPageFlights}
-        onPageChange={(page) => handlePageChange(page, 'flights')}
-      />
+      <div className="pagination">
+        <button
+          onClick={() => handlePageChange(currentPageFlights - 1, 'flights')}
+          disabled={currentPageFlights === 1}
+        >
+          Previous
+        </button>
+        <span>Page {currentPageFlights}</span>
+        <button
+          onClick={() => handlePageChange(currentPageFlights + 1, 'flights')}
+          disabled={paginatedFlights.length < itemsPerPageFlights}
+        >
+          Next
+        </button>
+      </div>
 
       <h3>Fare Details</h3>
       <button
