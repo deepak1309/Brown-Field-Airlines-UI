@@ -25,6 +25,72 @@ const Pagination = ({ currentPage, totalItems, itemsPerPage, onPageChange }) => 
   );
 };
 
+const airports = [
+  {
+    city: "Mumbai",
+    code: " BOM - Chhatrapati Shivaji International Airport",
+    airport: "Chhatrapati Shivaji International Airport",
+  },
+  {
+    city: "New Delhi",
+    code: "DEL",
+    airport: "Indira Gandhi International Airport",
+  },
+  {
+    city: "Bengaluru",
+    code: "BLR - Kempegowda International Airport",
+    airport: "Kempegowda International Airport",
+  },
+  { city: "Pune", code: "PNQ", airport: "Pune Airport" },
+  { city: "Chennai", code: "MAA", airport: "Chennai International Airport" },
+  {
+    city: "Kolkata",
+    code: "CCU",
+    airport: "Netaji Subhas Chandra Bose International Airport",
+  },
+  {
+    city: "Hyderabad",
+    code: "HYD",
+    airport: "Rajiv Gandhi International Airport",
+  },
+  {
+    city: "Ahmedabad",
+    code: "AMD",
+    airport: "Sardar Vallabhbhai Patel International Airport",
+  },
+  { city: "Goa", code: "GOI", airport: "Dabolim Airport" },
+  {
+    city: "Lucknow",
+    code: "LKO",
+    airport: "Chaudhary Charan Singh International Airport",
+  },
+  { city: "Jaipur", code: "JAI", airport: "Jaipur International Airport" },
+  { city: "Chandigarh", code: "IXC", airport: "Chandigarh Airport" },
+  {
+    city: "Coimbatore",
+    code: "CJB",
+    airport: "Coimbatore International Airport",
+  },
+  {
+    city: "Thiruvananthapuram",
+    code: "TRV",
+    airport: "Trivandrum International Airport",
+  },
+  { city: "Kochi", code: "COK", airport: "Cochin International Airport" },
+  {
+    city: "Nagpur",
+    code: "NAG",
+    airport: "Dr. Babasaheb Ambedkar International Airport",
+  },
+  { city: "Vadodara", code: "BDQ", airport: "Vadodara Airport" },
+  { city: "Bhopal", code: "BHO", airport: "Raja Bhoj International Airport" },
+  { city: "Indore", code: "IDR", airport: "Devi Ahilya Bai Holkar Airport" },
+  {
+    city: "Patna",
+    code: "PAT",
+    airport: "Jay Prakash Narayan International Airport",
+  },
+];
 const AdminDetails = () => {
   const { id } = useParams();
   const [aircraft, setAircraft] = useState([]);
@@ -215,35 +281,16 @@ const AdminDetails = () => {
 
   const handleFareEdit = async (id) => {
     if (!id) return;
-    
-    // Ensure that fareDetails matches the structure expected by the API
-    const updatedFareDetails = {
-      flight: { id: fareDetails.flight.id },
-      fareClass: fareDetails.fareClass.trim() || null, // Trim and set to null if empty
-      price: fareDetails.price
-    };
-  
-    // Validate fareClass
-    if (!updatedFareDetails.fareClass) {
-      alert("Fare class is required.");
-      return;
-    }
-  
     try {
-      const res = await axios.patch(`http://localhost:8080/api/fares/${id}`, updatedFareDetails);
-      
-      console.log(res.data)
-      setFares(prevFares => prevFares.map(fare => fare.id === id ? res.data : fare))
+      const res = await axios.patch(`http://localhost:8080/api/fares/${id}`, fareEdit);
+      setFares(prev => prev.map(fare => (fare.id === id ? res.data : fare)));
       setFareDetails({ flight: { id: '' }, fareClass: '', price: 0 });
       setFareEdit({});
-      
       alert("Fare updated successfully");
     } catch (error) {
       handleError(error);
     }
   };
-  
-  
 
   const paginatedAircraft = paginate(aircraft, currentPageAircraft, itemsPerPageAircraft);
   const paginatedFlights = paginate(flights, currentPageFlights, itemsPerPageFlights);
@@ -368,72 +415,177 @@ const AdminDetails = () => {
       </button>
 
       {showFlightTable && (
-        <>
-          <input
-            style={{ marginTop: "10px", margin: "5px" }}
-            type="text"
-            placeholder="Flight Number"
-            name="flightNumber"
-            value={flightDetails.flightNumber}
-            onChange={handleChange(setFlightDetails)}
-          />
-          <button onClick={handleGetFlight} type="button" className="btn btn-info">GET</button>
+  <>
+    <input
+      style={{ marginTop: "10px", margin: "5px" }}
+      type="text"
+      placeholder="Flight Number"
+      name="flightNumber"
+      value={flightDetails.flightNumber}
+      onChange={handleChange(setFlightDetails)}
+    />
+    <button onClick={handleGetFlight} type="button" className="btn btn-info">
+      GET
+    </button>
 
-          <div className="input-container">
-            <input
-              type="text"
-              placeholder="Flight Number"
-              name="flightNumber"
-              value={flightDetails.flightNumber}
-              onChange={handleChange(setFlightDetails)}
-            />
-            <input
-              type="text"
-              placeholder="Departure Time"
-              name="departureTime"
-              value={flightDetails.departureTime}
-              onChange={handleChange(setFlightDetails)}
-            />
-            <input
-              type="text"
-              placeholder="Arrival Time"
-              name="arrivalTime"
-              value={flightDetails.arrivalTime}
-              onChange={handleChange(setFlightDetails)}
-            />
-            <input
-              type="text"
-              placeholder="Source"
-              name="source"
-              value={flightDetails.source}
-              onChange={handleChange(setFlightDetails)}
-            />
-            <input
-              type="text"
-              placeholder="Destination"
-              name="destination"
-              value={flightDetails.destination}
-              onChange={handleChange(setFlightDetails)}
-            />
-            <select
-              name="aircraft.id"
-              value={flightDetails.aircraft.id}
-              onChange={(e) => setFlightDetails(prev => ({
-                ...prev,
-                aircraft: { id: e.target.value }
-              }))}
-            >
-              <option value="">Select Aircraft</option>
-              {aircraft.map(ac => (
-                <option key={ac.id} value={ac.id}>
-                  {ac.name} ({ac.model})
-                </option>
-              ))}
-            </select>
-            <button onClick={handleAddFlight} className="btn btn-primary">Add Flight</button>
-          </div>
+    <div className="input-container" style={{ marginTop: "15px" }}>
+      <input
+        type="text"
+        placeholder="Flight Number"
+        name="flightNumber"
+        value={flightDetails.flightNumber}
+        onChange={handleChange(setFlightDetails)}
+        required
+      />
+      <input
+        type="datetime-local"
+        placeholder="Departure Time"
+        name="departureTime"
+        value={flightDetails.departureTime}
+        onChange={handleChange(setFlightDetails)}
+        required
+      />
+      <input
+        type="datetime-local"
+        placeholder="Arrival Time"
+        name="arrivalTime"
+        value={flightDetails.arrivalTime}
+        onChange={handleChange(setFlightDetails)}
+        required
+      />
+       <select
+        name="source"
+        value={flightDetails.source}
+        onChange={handleChange(setFlightDetails)}
+        required
+      >
+        <option value="">Select Source</option>
+        {airports.map((airport) => (
+          <option key={airport.code} value={airport.code}>
+            {airport.city}, {airport.code} - {airport.airport}
+          </option>
+        ))}
+      </select>
 
-      <button onClick={flightget}>Flight</button>
+      <select
+        name="destination"
+        value={flightDetails.destination}
+        onChange={handleChange(setFlightDetails)}
+        required
+      >
+        <option value="">Select Destination</option>
+        {airports.map((airport) => (
+          <option key={airport.code} value={airport.code}>
+            {airport.city}, {airport.code} - {airport.airport}
+          </option>
+        ))}
+      </select>
+
+      <select
+        name="aircraft.id"
+        value={flightDetails.aircraft.id}
+        onChange={(e) => setFlightDetails(prev => ({
+          ...prev,
+          aircraft: { id: e.target.value }
+        }))}
+        required
+      >
+        <option value="">Select Aircraft</option>
+        {aircraft.map(ac => (
+          <option key={ac.id} value={ac.id}>
+            {ac.name} ({ac.model})
+          </option>
+        ))}
+      </select>
+      <button onClick={handleAddFlight} className="btn btn-primary">
+        Add Flight
+      </button>
+    </div>
+  
+
+
+          {flightEdit.id && (
+         <div className="edit-container">
+         <input
+           type="text"
+           placeholder="Flight Number"
+           name="flightNumber"
+           value={flightEdit.flightNumber || ''}
+           onChange={handleChange(setFlightEdit)}
+         />
+         <input
+           type="datetime-local"
+           placeholder="Departure Time"
+           name="departureTime"
+           value={flightEdit.departureTime || ''}
+           onChange={handleChange(setFlightEdit)}
+         />
+         <input
+           type="datetime-local"
+           placeholder="Arrival Time"
+           name="arrivalTime"
+           value={flightEdit.arrivalTime || ''}
+           onChange={handleChange(setFlightEdit)}
+         />
+       
+         <div className="select-container"  >
+           <select
+             name="source"
+             value={flightEdit.source || ''}
+             onChange={handleChange(setFlightEdit)}
+             required
+           >
+             <option value="">Select Source</option>
+             {airports.map((airport) => (
+               <option key={airport.code} value={airport.code}>
+                 {airport.city}, {airport.code} - {airport.airport}
+               </option>
+             ))}
+           </select>
+         </div>
+       
+         <div className="select-container">
+           <select
+             name="destination"
+             value={flightEdit.destination || ''}
+             onChange={handleChange(setFlightEdit)}
+             required
+           >
+             <option value="">Select Destination</option>
+             {airports.map((airport) => (
+               <option key={airport.code} value={airport.code}>
+                 {airport.city}, {airport.code} - {airport.airport}
+               </option>
+             ))}
+           </select>
+         </div>
+       
+         <select
+           name="aircraft.id"
+           value={flightEdit.aircraft?.id || ''}
+           onChange={(e) => setFlightEdit(prev => ({
+             ...prev,
+             aircraft: { id: e.target.value }
+           }))}
+         >
+           <option value="">Select Aircraft</option>
+           {aircraft.map(ac => (
+             <option key={ac.id} value={ac.id}>
+               {ac.name} ({ac.model})
+             </option>
+           ))}
+         </select>
+       
+         <button onClick={() => handleFlightEdit(flightEdit.id)} type="button" className="btn btn-primary">
+           Update Flight
+         </button>
+       </div>
+       
+           
+          )}
+        </>
+      )}
+
       <table>
         <thead>
           <tr>
@@ -466,105 +618,84 @@ const AdminDetails = () => {
           ))}
         </tbody>
       </table>
-      <div className="pagination">
-        <button
-          onClick={() => handlePageChange(currentPageFlights - 1, 'flights')}
-          disabled={currentPageFlights === 1}
-        >
-          Previous
-        </button>
-        <span>Page {currentPageFlights}</span>
-        <button
-          onClick={() => handlePageChange(currentPageFlights + 1, 'flights')}
-          disabled={paginatedFlights.length < itemsPerPageFlights}
-        >
-          Next
-        </button>
-      </div>
+
+      <Pagination
+        currentPage={currentPageFlights}
+        totalItems={flights.length}
+        itemsPerPage={itemsPerPageFlights}
+        onPageChange={(page) => handlePageChange(page, 'flights')}
+      />
 
       <h3>Fare Details</h3>
+
       <button
-  onClick={() => setShowFareTable(prev => !prev)}
-  type="button"
-  className="btn btn-success"
->
-  {showFareTable ? 'Hide' : 'Add'} Fare Details
-</button>
-
-{showFareTable && (
-  <>
-    <div className="input-container">
-      <input
-        type="text"
-        placeholder="Flight ID"
-        name="flightId"
-        value={fareDetails.flightId || ''}
-        onChange={e => setFareDetails(prev => ({
-          ...prev,
-          flightId: e.target.value
-        }))}
-      />
-      <input
-        type="text"
-        placeholder="Fare Class"
-        name="fareClass"
-        value={fareDetails.fareClass || ''}
-        onChange={e => setFareDetails(prev => ({
-          ...prev,
-          fareClass: e.target.value
-        }))}
-      />
-      <input
-        type="number"
-        placeholder="Price"
-        name="price"
-        value={fareDetails.price || ''}
-        onChange={e => setFareDetails(prev => ({
-          ...prev,
-          price: e.target.value
-        }))}
-      />
-      <button onClick={handleAddFare} className="btn btn-primary">Add Fare</button>
-    </div>
-
-    {fareEdit.id && (
-      <div className="edit-container">
+        onClick={() => setShowFareTable(prev => !prev)}
+        type="button"
+        className="btn btn-success"
+      >
+        {showFareTable ? 'Hide' : 'Add'} Fare Details
+      </button>
+      {showFareTable && (
+        <>
+       
+      <div className="input-container">
         <input
           type="text"
           placeholder="Flight ID"
-          name="flightId"
-          value={fareEdit.flight.id || ''}
-          onChange={e => setFareEdit(prev => ({
+          name="flight.id"
+          value={fareDetails.flight.id}
+          onChange={(e) => setFareDetails(prev => ({
             ...prev,
-            flightId: e.target.value
+            flight: { id: e.target.value }
           }))}
         />
         <input
           type="text"
           placeholder="Fare Class"
           name="fareClass"
-          value={fareEdit.fareClass || ''}
-          onChange={e => setFareEdit(prev => ({
-            ...prev,
-            fareClass: e.target.value
-          }))}
+          value={fareDetails.fareClass}
+          onChange={handleChange(setFareDetails)}
         />
         <input
           type="number"
           placeholder="Price"
           name="price"
-          value={fareEdit.price || ''}
-          onChange={e => setFareEdit(prev => ({
-            ...prev,
-            price: e.target.value
-          }))}
+          value={fareDetails.price}
+          onChange={handleChange(setFareDetails)}
         />
-        <button onClick={() => handleFareEdit(fareEdit.id)} className="btn btn-primary">Update Fare</button>
+        <button onClick={handleAddFare} className="btn btn-primary">Add Fare</button>
       </div>
-    )}
-  </>
-)}
-
+      {fareEdit.id && (
+        <div className="edit-container">
+          <input
+            type="text"
+            placeholder="Flight ID"
+            name="flight.id"
+            value={fareEdit.flight.id}
+            onChange={(e) => setFareDetails(prev => ({
+              ...prev,
+              flight: { id: e.target.value }
+            }))}
+          />
+          <input
+            type="text"
+            placeholder="Fare Class"
+            name="fareClass"
+            value={fareEdit.fareClass}
+            onChange={handleChange(setFareEdit)}
+          />
+          <input
+            type="number"
+            placeholder="Price"
+            name="price"
+            value={fareEdit.price}
+            onChange={handleChange(setFareEdit)}
+          />
+          <button onClick={() => handleFareEdit(fareEdit.id)} className="btn btn-primary">Update Fare</button>
+        </div>
+      )}
+        </>
+      )}
 
       <table>
         <thead>
