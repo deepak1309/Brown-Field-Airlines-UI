@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../asserts/css/Register.css'; // Ensure this path is correct
+import '../asserts/css/Register.css'; 
 import { register } from '../Service/Register';
 
 export default function Register() {
@@ -24,10 +24,12 @@ export default function Register() {
     const errors = {};
     const { name, email, loginId, password, confirmPassword } = formData;
 
+    const emailLowerCase = email.toLowerCase();
+
     if (!name) errors.name = 'Full Name is required.';
-    if (!email) {
+    if (!emailLowerCase) {
       errors.email = 'Email Address is required.';
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
+    } else if (!/@\S+/.test(emailLowerCase)) {
       errors.email = 'Email Address is invalid.';
     }
     if (!loginId) errors.loginId = 'Login ID is required.';
@@ -43,13 +45,18 @@ export default function Register() {
     const validationErrors = validate();
     setErrors(validationErrors);
   
-    if (Object.keys(validationErrors).length > 0) return; // Stop submission if there are validation errors
+    if (Object.keys(validationErrors).length > 0) return;
+
+
+    const formDataLowerCase = {
+      ...formData,
+      email: formData.email.toLowerCase()
+    };
   
-    register(formData)
+    register(formDataLowerCase)
       .then((res) => {
         console.log('Registration response:', res.data);
   
-     
         if (res.data === "Email must be unique") {
           setMessage('Email address is already registered. Please use another.');
           alert('Email address is already registered. Please use another.');
@@ -78,7 +85,7 @@ export default function Register() {
           console.log('Error response data:', responseData);
           console.log('Error response status:', responseStatus);
   
-          if (responseStatus === 200) {
+          if (responseStatus === 400) {
             if (responseData === "Email must be unique") {
               setMessage('Email address is already registered. Please use another.');
               alert('Email address is already registered. Please use another.');
@@ -99,9 +106,6 @@ export default function Register() {
         }
       });
   };
-  
-  
-  
 
   return (
     <div className='body'>

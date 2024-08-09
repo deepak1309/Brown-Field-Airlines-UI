@@ -461,7 +461,7 @@ const AdminDetails = () => {
       >
         <option value="">Select Source</option>
         {airports.map((airport) => (
-          <option key={airport.code} value={airport.code}>
+          <option key={airport.code} value={airport.city}>
             {airport.city}, {airport.code} - {airport.airport}
           </option>
         ))}
@@ -475,7 +475,7 @@ const AdminDetails = () => {
       >
         <option value="">Select Destination</option>
         {airports.map((airport) => (
-          <option key={airport.code} value={airport.code}>
+          <option key={airport.code} value={airport.city}>
             {airport.city}, {airport.code} - {airport.airport}
           </option>
         ))}
@@ -537,7 +537,7 @@ const AdminDetails = () => {
            >
              <option value="">Select Source</option>
              {airports.map((airport) => (
-               <option key={airport.code} value={airport.code}>
+               <option key={airport.code} value={airport.city}>
                  {airport.city}, {airport.code} - {airport.airport}
                </option>
              ))}
@@ -553,7 +553,7 @@ const AdminDetails = () => {
            >
              <option value="">Select Destination</option>
              {airports.map((airport) => (
-               <option key={airport.code} value={airport.code}>
+               <option key={airport.code} value={airport.city}>
                  {airport.city}, {airport.code} - {airport.airport}
                </option>
              ))}
@@ -656,6 +656,17 @@ const AdminDetails = () => {
           value={fareDetails.fareClass}
           onChange={handleChange(setFareDetails)}
         />
+          {/* <select
+        name="destination"
+        value={flightDetails.destination}
+        onChange={handleChange(setFlightDetails)}
+        required
+      >
+        <option value="">Select Fare Class</option>
+      <option>ECONOMY</option>
+      <option>BUSSINESS</option>
+      <option>PREMIUM_ECONOMY</option>
+      </select> */}
         <input
           type="number"
           placeholder="Price"
