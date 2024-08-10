@@ -19,6 +19,7 @@ import Bookinddetails from "./pages/Bookingdetails";
 import BookingDetails from "./pages/Bookingdetails";
 import Payment from "./pages/Payment";
 import Footer from "./pages/Component/Footer";
+import Checkin from "./pages/Checkin";
 
 function App() {
   return (
@@ -39,7 +40,7 @@ function App() {
               <Route path="/Admin" element={<Admin />} />
               <Route path="/details" element={<Details />} />
               <Route path="/add" element={<Add />} />
-              {/* <Route path="/book" element={<Booking/>}/> */}
+              <Route path="/checkin" element={<Checkin/>}/>
               <Route path="/Book" element={<BookingDetails />} />
               <Route path="/pay" element={<Payment />} />
             </Routes>

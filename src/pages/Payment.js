@@ -1,10 +1,15 @@
 import React, { useContext } from 'react';
 import { FlightContext } from './Context/FlightContextProvide';
 import { Card, CardContent, Typography } from '@mui/material';
+import { Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 export default function Payment() {
   const { booking } = useContext(FlightContext);
-
+  const nav=useNavigate()
+  const handle=()=>{
+    nav("/checkin")
+  }
   return (
     <div style={{ padding: '20px' }}>
       <Card variant="outlined" style={{ maxWidth: 600, margin: '0 auto' }}>
@@ -81,6 +86,8 @@ export default function Payment() {
               <Typography variant="body1" style={{ fontSize: '16px' }}>
                 Total Amount: Rs {booking.payment.totalAmount || 'N/A'}
               </Typography>
+
+              <Button onClick={handle}>Check-in Confirm</Button>
             </div>
           ) : (
             <Typography variant="body1" style={{ fontSize: '16px' }}>

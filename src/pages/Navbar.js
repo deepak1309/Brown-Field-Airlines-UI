@@ -40,7 +40,7 @@ export default function Navbar() {
     return regex.test(path);
   };
 
-  const showIconOnPages = ['/searchPage', "/results", "/results1", "/Book", "/Admin", "/pay"].includes(location.pathname) || isDynamicRoute(location.pathname);
+  const showIconOnPages = ['/searchPage', "/results", "/results1", "/Book", "/Admin", "/pay","/checkin"].includes(location.pathname) || isDynamicRoute(location.pathname);
 
   return (
     <div className='nav'>
@@ -61,21 +61,30 @@ export default function Navbar() {
               {isAuthenticated && showIconOnPages ? (
                 <>
                 {user?.includes('ADMIN') ? (
+                          <>
                            <li className="nav-item" style={{ marginLeft: "210px" }}>
                            <a className="nav-link active" aria-current="page" href='/Admin'>Home</a>
-                         </li> 
+                         </li>
+                         <li className="nav-item">
+                         <a className="nav-link">About</a>
+                       </li>
+                       <li className="nav-item">
+                         <a className="nav-link">Flight</a>
+                       </li> </>
                         ):(
+                         <>
                           <li className="nav-item" style={{ marginLeft: "210px" }}>
                           <a className="nav-link active" aria-current="page" href='/searchPage'>Home</a>
                         </li>
+                         <li className="nav-item">
+                         <a className="nav-link">About</a>
+                       </li>
+                       <li className="nav-item">
+                         <a className="nav-link">Flight</a>
+                       </li></>
                         )}
 
-                  <li className="nav-item">
-                    <a className="nav-link">About</a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link">Flight</a>
-                  </li>
+                 
                   <li className="nav-item" style={{ margin: "2px" }}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                       <IconButton onClick={handleClick} edge="end" color="success">
